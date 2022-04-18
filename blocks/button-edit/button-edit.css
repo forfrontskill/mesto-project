@@ -1,0 +1,23 @@
+.button-edit {
+    grid-row: 1;
+    grid-column: 2;
+    justify-self: end;
+    align-self: center;
+    border: 1px solid #FFFFFF;
+    background-color: #000000;
+    border-radius: 0;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.button-edit:hover {
+    opacity: 60%;
+}
+
+@media screen and (max-width: 690px) {
+    .button-edit {
+        width: 18px;
+        height: 18px;
+    }
+}

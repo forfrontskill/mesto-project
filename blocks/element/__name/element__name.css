@@ -1,0 +1,8 @@
+.element__name {
+    color: #000000;
+    margin: 0;
+    padding-left: 21px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}

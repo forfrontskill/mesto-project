@@ -1,0 +1,12 @@
+.form-profile__info {
+    padding: 40px 0 0;
+    /*margin-top: 40px;*/
+    /*padding: 0;*/
+    border: 0;
+}
+
+@media screen and (max-width: 880px){
+    .form-profile__info {
+        padding: 75px 0 0;
+    }
+}
