@@ -1,99 +1,85 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="pages/index.css" />
-    <title>Mesto</title>
-</head>
-<body class="page">
-<header class="header">
-    <div class="header__logo"></div>
-</header>
-<main>
-    <section class="profile">
-        <img class="profile__avatar" src="./images/kysto.png" alt="Аватар" />
-        <div class="profile__info">
-            <p class="profile__name">Жак-Ив Кусто</p>
-            <p class="profile__description">Исследователь океана</p>
-            <button class="button-edit profile__button-edit">
-                <img class="button-edit__icon" src="./images/pen_icon.svg" alt="Иконка карандаша" />
-            </button>
-        </div>
-        <button class="button-add profile__button-add"><img class="button-add__icon" src="./images/plus_icon.svg" alt="Иконка плюса" /></button>
-    </section>
-    <section class="elements">
-        <div class="element">
-            <img class="element__image" src="./images/kusto_travel/kusto_profile.jpeg" alt="Чернобелое фото профиля Кусто" />
-            <div class="element__footer">
-                <p class="element__name">Великий открыватель</p>
-                <button class="element__button-like">
-                    <img class="element__like" src="./images/like_icon.svg" alt="Лайк в виде сердца" />
-                </button>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="pages/index.css" />
+        <title>Mesto</title>
+    </head>
+    <body class="page">
+        <header class="header">
+            <div class="header__logo"></div>
+        </header>
+        <main class="content">
+            <section class="profile">
+                <img class="profile__avatar" src="./images/kysto.png" alt="Аватар" />
+                <div class="profile__info">
+                    <h1 class="profile__name">Жак-Ив Кусто</h1>
+                    <p class="profile__description">Исследователь океана</p>
+                    <button class="profile__button-edit" aria-label="Редактировать" type="button"></button>
+                </div>
+                <button class="profile__button-add" aria-label="Добавить пост" type="button"></button>
+            </section>
+            <section class="elements">
+                <div class="element">
+                    <img class="element__image" src="./images/kusto_travel/kusto_profile.jpeg" alt="Чернобелое фото профиля Кусто" />
+                    <div class="element__footer">
+                        <h2 class="element__name">Великий открыватель</h2>
+                        <button class="element__button-like" aria-label="Кнопка лайка" type="button"></button>
+                    </div>
+                </div>
+                <div class="element">
+                    <img class="element__image" src="./images/kusto_travel/kusto_radio.jpeg" alt="Фото работы с акустикой в море" />
+                    <div class="element__footer">
+                        <h2 class="element__name">Шум глубин</h2>
+                        <button class="element__button-like" aria-label="Кнопка лайка" type="button"></button>
+                    </div>
+                </div>
+                <div class="element">
+                    <img class="element__image" src="./images/kusto_travel/kusto_pigin.jpeg" alt="Фото кусто в Антарктике рядом с пингвинами" />
+                    <div class="element__footer">
+                        <h2 class="element__name">Антарктика</h2>
+                        <button class="element__button-like element__button-like_active" type="button"></button>
+                    </div>
+                </div>
+                <div class="element">
+                    <img class="element__image" src="./images/kusto_travel/kusto_ship.jpeg" alt="Фото погружения ботискафа" />
+                    <div class="element__footer">
+                        <h2 class="element__name">Глубины моря</h2>
+                        <button class="element__button-like" aria-label="Кнопка лайка" type="button"></button>
+                    </div>
+                </div>
+                <div class="element">
+                    <img class="element__image" src="./images/kusto_travel/kusto_hidro.jpeg" alt="Фото перед погружением в гидрокостюме" />
+                    <div class="element__footer">
+                        <h2 class="element__name">Экспедиция в глубины</h2>
+                        <button class="element__button-like" aria-label="Кнопка лайка" type="button"></button>
+                    </div>
+                </div>
+                <div class="element">
+                    <img class="element__image" src="./images/kusto_travel/kusto_team.jpeg" alt="Фото главных участников команды кусто" />
+                    <div class="element__footer">
+                        <h2 class="element__name">Поколение</h2>
+                        <button class="element__button-like" aria-label="Кнопка лайка" type="button"></button>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer class="footer">
+            <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
+        </footer>
+        <div class="popup">
+            <div class="popup__container">
+                <button class="popup__button-close" aria-label="Закрыть форму редактирования профиля" type="button"></button>
+                <form class="form-profile" name="profile-edit">
+                    <h3 class="form-profile__title">Редактировать профиль</h3>
+                    <fieldset class="form-profile__info">
+                        <input type="text" class="form-profile__text-input" name="name" placeholder="ФИО" required />
+                        <input type="text" class="form-profile__text-input" name="profile" placeholder="Профессия" required />
+                    </fieldset>
+                    <button class="form-profile__button-save" type="submit">Сохранить</button>
+                </form>
             </div>
         </div>
-        <div class="element">
-            <img class="element__image" src="./images/kusto_travel/kusto_radio.jpeg" alt="Фото работы с акустикой в море" />
-            <div class="element__footer">
-                <p class="element__name">Шум глубин</p>
-                <button class="element__button-like">
-                    <img class="element__like" alt="Лайк в виде сердца" />
-                </button>
-            </div>
-        </div>
-        <div class="element">
-            <img class="element__image" src="./images/kusto_travel/kusto_pigin.jpeg" alt="Фото кусто в Антарктике рядом с пингвинами" />
-            <div class="element__footer">
-                <p class="element__name">Антарктика</p>
-                <button class="element__button-like">
-                    <img class="element__like element__like_active" src="./images/like_icon.svg" alt="Лайк в виде сердца" />
-                </button>
-            </div>
-        </div>
-        <div class="element">
-            <img class="element__image" src="./images/kusto_travel/kusto_ship.jpeg" alt="Фото погружения ботискафа" />
-            <div class="element__footer">
-                <p class="element__name">Глубины моря</p>
-                <button class="element__button-like">
-                    <img class="element__like" src="./images/like_icon.svg" alt="Лайк в виде сердца" />
-                </button>
-            </div>
-        </div>
-        <div class="element">
-            <img class="element__image" src="./images/kusto_travel/kusto_hidro.jpeg" alt="Фото перед погружением в гидрокостюме" />
-            <div class="element__footer">
-                <p class="element__name">Экспедиция в глубины</p>
-                <button class="element__button-like">
-                    <img class="element__like" src="./images/like_icon.svg" alt="Лайк в виде сердца" />
-                </button>
-            </div>
-        </div>
-        <div class="element">
-            <img class="element__image" src="./images/kusto_travel/kusto_team.jpeg" alt="Фото главных участников команды кусто" />
-            <div class="element__footer">
-                <p class="element__name">Поколение</p>
-                <button class="element__button-like">
-                    <img class="element__like" src="./images/like_icon.svg" alt="Лайк в виде сердца" />
-                </button>
-            </div>
-        </div>
-    </section>
-</main>
-<footer class="footer">
-    <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
-</footer>
-<div class="popup">
-    <div class="popup__container">
-        <button class="button-close popup__button-close"><img class="button-close__icon" src="./images/close_Icon.svg" alt="Символ крестика-закрытия" /></button>
-        <form class="form-profile">
-            <p class="form-profile__title">Редактировать профиль</p>
-            <fieldset class="form-profile__info">
-                <input type="text" class="form-profile__text-input" name="name" placeholder="ФИО" required />
-                <input type="text" class="form-profile__text-input" name="profile" placeholder="Профессия" required />
-            </fieldset>
-            <button type="submit" class="form-profile__button-save">Сохранить</button>
-        </form>
-    </div>
-</div>
-</body>
+    </body>
 </html>

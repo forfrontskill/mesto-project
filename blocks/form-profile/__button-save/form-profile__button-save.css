@@ -9,6 +9,8 @@
     text-align: center;
     border: 0;
     margin-top: 48px;
+    border-radius: 2px;
+    cursor: pointer;
 }
 
 .form-profile__button-save:hover {
@@ -19,5 +21,7 @@
     .form-profile__button-save {
         margin-top: 45px;
         height: 46px;
+        font-size: 14px;
+        line-height: 17px;
     }
 }
