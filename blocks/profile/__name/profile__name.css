@@ -20,5 +20,6 @@
         justify-self: end;
         font-size: 27px;
         line-height: 33px;
+        max-width: 189px;
     }
 }
