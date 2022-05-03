@@ -1,5 +1,7 @@
+const docPage = document.querySelector('.page');
 const docContent = document.querySelector('.content');
 const docProfile = docContent.querySelector('.profile');
+const docProfilePopup = docPage.querySelector('.popup');
 
 
 const profileInfo = {
@@ -12,7 +14,9 @@ const profileInfo = {
 function pageRender() {
     console.log('Start Render');
     updateProfileInfo(profileInfo.name, profileInfo.description);
-    toggleProfilePopup();
+    // toggleProfilePopup();
+    subscribeEditProfileButton();
+    subscribeCloseProfileButton();
 }
 
 function updateProfileInfo(name, description){
@@ -23,9 +27,19 @@ function updateProfileInfo(name, description){
 }
 
 function toggleProfilePopup(){
-    const docPage = document.querySelector('.page');
-    const docProfilePopup = docPage.querySelector('.popup');
+    console.log('Event toggle profile');
     docProfilePopup.classList.toggle('popup_visible');
+}
+
+function subscribeEditProfileButton(){
+    const editProfileButton = docProfile.querySelector('.profile__button-edit');
+    editProfileButton.addEventListener('click',toggleProfilePopup);
+}
+
+function subscribeCloseProfileButton(){
+    const closeProfileButton = docProfilePopup.querySelector('.popup__button-close');
+    console.log(closeProfileButton);
+    closeProfileButton.addEventListener('click',toggleProfilePopup);
 }
 
 
