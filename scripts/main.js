@@ -8,8 +8,8 @@ const docCardImagePopup = docPage.querySelector('#popup-card-image');
 
 
 const profileInfo = {
-    name: '(Render)Жак-Ив Куст',
-    description: '(Render) Исследователь океанаИсследователь океана',
+    name: 'Жак-Ив Куст',
+    description: 'Исследователь океанаИсследователь океана',
 }
 
 
@@ -150,7 +150,7 @@ function addCardIntoStore(card) {
 function deleteCardFromStore(card) {
     const cardId = card.id;
     deltedIndexOfCard = initialCards.findIndex(itemCard => itemCard.id.toString() === cardId);
-    initialCards.splice(deltedIndexOfCard,1);
+    initialCards.splice(deltedIndexOfCard, 1);
 }
 
 function saveCardEvent(event) {
