@@ -93,11 +93,20 @@ function saveProfile(evt) {
 function openPopup(popup) {
     popup.classList.add('popup_visible');
     popup.addEventListener('click', closePopupOutside);
+    document.addEventListener('keydown', closePopupOutsideByEscape);
 }
 
 function closePopup(popup) {
     popup.classList.remove('popup_visible');
     popup.removeEventListener('click', closePopupOutside);
+}
+
+function closePopupOutsideByEscape(evt){
+    if(evt.key==='Escape'){
+        const openedPopup = document.querySelector('.popup_visible');
+        document.removeEventListener('keydown', closePopupOutsideByEscape);
+        closePopup(openedPopup);
+    }
 }
 
 function closePopupOutside(evt) {
