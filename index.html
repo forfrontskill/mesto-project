@@ -32,11 +32,15 @@
         <div class="popup__container">
             <button class="popup__button-close" aria-label="Закрыть форму редактирования профиля"
                 type="button"></button>
-            <form class="form-popup" name="profile-edit">
+            <form class="form-popup" name="profile-edit" novalidate>
                 <h3 class="form-popup__title">Редактировать профиль</h3>
                 <fieldset class="form-popup__info">
-                    <input type="text" class="form-popup__text-input" name="name" placeholder="ФИО" required />
-                    <input type="text" class="form-popup__text-input" name="profile" placeholder="Профессия" required />
+                    <input id="name-input" type="text" class="form-popup__text-input" name="name" placeholder="ФИО"
+                        minlength="2" maxlength="40" required />
+                    <span class="name-input-error form-popup__input-error">ERROR</span>
+                    <input id="profile-input" type="text" class="form-popup__text-input" name="profile"
+                        placeholder="Профессия" minlength="2" maxlength="200" required />
+                    <span class="profile-input-error form-popup__input-error">ERROR</span>
                 </fieldset>
                 <button class="form-popup__button-save" type="submit">Сохранить</button>
             </form>
@@ -46,13 +50,15 @@
         <div class="popup__container">
             <button class="popup__button-close" aria-label="Закрыть форму редактирования профиля"
                 type="button"></button>
-            <form class="form-popup" name="card-create">
+            <form class="form-popup" name="card-create" novalidate>
                 <h3 class="form-popup__title">Новое место</h3>
                 <fieldset class="form-popup__info">
-                    <input type="text" class="form-popup__text-input" name="card-name" placeholder="Название"
+                    <input id="card-name" type="text" class="form-popup__text-input" name="card-name" placeholder="Название" minlength="2" maxlength="30"
                         required />
-                    <input type="text" class="form-popup__text-input" name="card-image-link"
+                    <span class="card-name-error name-input-error form-popup__input-error">ERROR</span>
+                    <input id="card-link" type="url" class="form-popup__text-input" name="card-image-link"
                         placeholder="Ссылка на картинку" required />
+                    <span class="card-link-error name-input-error form-popup__input-error">ERROR</span>
                 </fieldset>
                 <button class="form-popup__button-save" type="submit">Сохранить</button>
             </form>
@@ -76,5 +82,7 @@
         </div>
     </template>
     <script src="/scripts/main.js" type="module"></script>
+    <script src="/src/index.js" type="module"></script>
 </body>
+
 </html>
