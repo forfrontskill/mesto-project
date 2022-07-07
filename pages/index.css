@@ -42,3 +42,7 @@
 @import url('../blocks/form-popup/__text-input/form-popup__text-input.css');
 @import url('../blocks/form-popup/__button-save/form-popup__button-save.css');
 @import url('../blocks/form-popup/__info/form-popup__info.css');
+@import url('../blocks/form-popup/__input-error/form-popup__input-error.css');
+@import url('../blocks/form-popup/__input-error/_active/form-popup__input-error_active.css');
+@import url('../blocks/form-popup/__text-input/_error/form-popup__text-input_error.css');
+@import url('../blocks/form-popup/__button-save/_disable/form-popup__button-save_disable.css');

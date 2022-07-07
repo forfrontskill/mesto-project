@@ -11,8 +11,10 @@ const docCardPopup = docPage.querySelector('#popup-card');
 const docCardImagePopup = docPage.querySelector('#popup-card-image');
 const docPopupCardImage = docCardImagePopup.querySelector('.popup__image');
 const docPopupCardImageDescription = docCardImagePopup.querySelector('.popup__image-description');
+const docPopups = document.querySelectorAll('.popup__container');
 
 const cardTemplate = document.querySelector('#card-template').content;
+
 
 const editProfileButton = docProfile.querySelector('.profile__button-edit');
 editProfileButton.addEventListener('click', () => {
@@ -90,12 +92,20 @@ function saveProfile(evt) {
 
 function openPopup(popup) {
     popup.classList.add('popup_visible');
+    popup.addEventListener('click', closePopupOutside);
 }
 
 function closePopup(popup) {
     popup.classList.remove('popup_visible');
+    popup.removeEventListener('click', closePopupOutside);
 }
 
+function closePopupOutside(evt) {
+    const isClosest = evt.target.closest('.popup__container');
+    if (!isClosest) {
+        closePopup(evt.currentTarget);
+    }
+}
 
 function createCardElement({ name, link, imageDescription, favorite }) {
     const card = cardTemplate.querySelector('.element').cloneNode(true);
