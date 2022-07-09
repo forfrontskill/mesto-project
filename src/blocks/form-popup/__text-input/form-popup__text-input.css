@@ -1,0 +1,21 @@
+.form-popup__text-input {
+    outline: none;
+    width: 100%;
+    max-height: 27px;
+    border: 0;
+    border-bottom: 1px solid rgba(0,0,0,0.20);
+    margin-bottom: 30px;
+    padding-bottom: 13px;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.form-popup__text-input::placeholder {
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.form-popup__text-input:last-child {
+    margin-bottom: 0;
+}
