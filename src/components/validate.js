@@ -44,7 +44,6 @@ const toggleFormSubmitButton = (inputs,button)=>{
 
 const showError = (input)=>{
     const id = input.id;
-    //TODO: добавить проверку наличия подсказки
     const errorElement = document.querySelector(`.${id}-error`);
     errorElement.textContent = input.validationMessage;
     errorElement.classList.add('form-popup__input-error_active')
@@ -53,7 +52,6 @@ const showError = (input)=>{
 
 const hideError = (input)=>{
     const id = input.id;
-    //TODO: добавить проверку наличия подсказки
     const errorElement = document.querySelector(`.${id}-error`);
     errorElement.textContent = '';
     errorElement.classList.remove('form-popup__input-error_active');
