@@ -1,0 +1,14 @@
+.form-popup__input-error {
+    display: none;
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: #FF0000;
+    padding-top: 5px;
+    margin-bottom: 13px;
+}
+
+.form-popup__input-error:last-child {
+    margin-bottom: 0;
+}

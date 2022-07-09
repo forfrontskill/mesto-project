@@ -1,0 +1,9 @@
+.form-popup__button-save_disable {
+    opacity: 0.2;
+    background-color: transparent;
+    border: 1px solid #000000;
+    color: #000000;
+    cursor: default;
+    pointer-events: none;
+}
+
