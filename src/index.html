@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="pages/index.css" />
     <title>Mesto</title>
 </head>
 
@@ -14,7 +13,7 @@
     </header>
     <main class="content">
         <section class="profile">
-            <img class="profile__avatar" src="./images/kysto.png" alt="Аватар" />
+            <img class="profile__avatar" src="<%=require('./images/kysto.png')%>" alt="Аватар" />
             <div class="profile__info">
                 <h1 class="profile__name">Жак-Ив Кусто</h1>
                 <p class="profile__description">Исследователь океана</p>
@@ -67,7 +66,7 @@
     <div class="popup" id="popup-card-image">
         <div class="popup__container popup__container_image">
             <button class="popup__button-close" aria-label="Закрыть окно с изображением" type="button"></button>
-            <img class="popup__image" src="./images/kusto_travel/kusto_profile.jpeg" alt="'">
+            <img class="popup__image" src="<%=require('./images/kusto_travel/kusto_profile.jpeg')%>" alt="'">
             <p class="popup__image-description"></p>
         </div>
     </div>
@@ -81,8 +80,6 @@
             </div>
         </div>
     </template>
-    <script src="/scripts/main.js" type="module"></script>
-    <script src="/src/index.js" type="module"></script>
 </body>
 
 </html>
