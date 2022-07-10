@@ -31,7 +31,6 @@ const subscribeInputListeners = (inputs, submitButton) => {
             toggleFormSubmitButton(inputs, submitButton);
         });
     });
-
 }
 
 const isValid = (input) => {
@@ -47,9 +46,9 @@ const validationForm = (inputs) => Array.from(inputs).some((input) => !input.val
 
 const toggleFormSubmitButton = (inputs, button) => {
     if (validationForm(inputs)) {
-        button.classList.add(validationClassNames.inactiveButtonClass);
+        disableSubmitButton(button);
     } else {
-        button.classList.remove(validationClassNames.inactiveButtonClass);
+        activeSubmitButton(button);
     }
 
 };
@@ -70,4 +69,22 @@ const hideError = (input) => {
     input.classList.remove(validationClassNames.inputErrorClass);
 };
 
+export const initValidationSubmitButton = (form)=>{
+    const inputs = form.querySelectorAll(validationClassNames.inputSelector);
+    const validationResult = validationForm(inputs);
+    if(validationResult){
+        const submitButton = form.querySelector(validationClassNames.submitButtonSelector);
+        disableSubmitButton(submitButton);
+    }
+}
+
+const disableSubmitButton = (submitButton) =>{
+    submitButton.classList.add(validationClassNames.inactiveButtonClass);
+    submitButton.setAttribute("disabled", "");
+}
+
+const activeSubmitButton = (submitButton) => {
+    submitButton.classList.remove(validationClassNames.inactiveButtonClass);
+    submitButton.removeAttribute("disabled", "");
+}
 
