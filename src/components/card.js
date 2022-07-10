@@ -107,15 +107,5 @@ const subscribeDeleteCardButton = (cardElement) => {
 
 const addCardButton = docPage.querySelector('.profile__button-add');
 addCardButton.addEventListener('click', () => {
-    openPopup(docCardPopup);
-});
-
-const closeCardPopupButton = docCardPopup.querySelector('.popup__button-close');
-closeCardPopupButton.addEventListener('click', () => {
-    closePopup(docCardPopup);
-});
-
-const closeCardImagePopup = docCardImagePopup.querySelector('.popup__button-close');
-closeCardImagePopup.addEventListener('click', () => {
-    closePopup(docCardImagePopup);
+    openPopup(docCardPopup,true);
 });

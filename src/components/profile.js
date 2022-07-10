@@ -43,8 +43,3 @@ editProfileButton.addEventListener('click', () => {
     uploadProfilePopup(profileInfo.name, profileInfo.description);
     openPopup(docProfilePopup);
 });
-
-const closeProfileButton = docProfilePopup.querySelector('.popup__button-close');
-closeProfileButton.addEventListener('click', () => {
-    closePopup(docProfilePopup);
-});
