@@ -1,10 +1,4 @@
-import {initValidationSubmitButton} from './validate.js';
-
-export const openPopup = (popup,validateSubmit = false) => {
-    if(validateSubmit){
-        const form = popup.querySelector('.form-popup');
-        initValidationSubmitButton(form);
-    }
+export const openPopup = (popup) => {
     popup.classList.add('popup_visible');
     popup.addEventListener('click', closePopupOutside);
     document.addEventListener('keydown', closePopupOutsideByEscape);

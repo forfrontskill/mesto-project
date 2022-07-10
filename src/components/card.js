@@ -1,3 +1,4 @@
+import {initValidationSubmitButton} from './validate.js';
 import {openPopup, closePopup } from './modal.js';
 import { initialCards } from './store/store.js';
 
@@ -107,5 +108,6 @@ const subscribeDeleteCardButton = (cardElement) => {
 
 const addCardButton = docPage.querySelector('.profile__button-add');
 addCardButton.addEventListener('click', () => {
-    openPopup(docCardPopup,true);
+    openPopup(docCardPopup);
+    initValidationSubmitButton(formCard);
 });
