@@ -1,6 +1,8 @@
 .element__footer {
-    display: flex;
-    padding: 25px 0 31px;
+    display: grid;
+    grid-template-columns: auto 22px;
+    grid-template-rows: auto auto;
+    padding: 22px 15px 22px 20px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     flex-direction: row;

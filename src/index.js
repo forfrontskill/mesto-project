@@ -17,3 +17,4 @@ enableValidation(validationClass);
 renderProfile();
 uploadCards();
 subscribeCloseAllPopup();
+
