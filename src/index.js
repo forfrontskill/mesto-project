@@ -1,7 +1,7 @@
 import { enableValidation } from './components/validate.js';
 import { renderProfile } from './components/profile.js';
-import { uploadCards } from './components/card.js';
 import { subscribeCloseAllPopup } from './components/modal.js';
+import { uploadCards } from './components/card.js';
 
 import './pages/index.css';
 
@@ -17,3 +17,4 @@ enableValidation(validationClass);
 renderProfile();
 uploadCards();
 subscribeCloseAllPopup();
+
