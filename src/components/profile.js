@@ -1,7 +1,6 @@
 import { openPopup, closePopup, showLoading, hideLoading} from './modal.js';
 import { profileInfo } from './store/store.js';
 import { fetchGetUser, fetchUpdateUser, fetchUpdateAvatar } from './api.js';
-import { uploadCards } from './card.js';
 
 const docPage = document.querySelector('.page');
 const docContent = document.querySelector('.content');
@@ -21,9 +20,6 @@ export const renderProfile = () => {
     fetchGetUser()
         .then(({ name, about, avatar }) => {
             updateProfileInfo(name, about, avatar);
-        })
-        .then(()=>{
-            uploadCards();
         })
         .catch((error => console.log(error)));
 }
