@@ -1,4 +1,6 @@
 export const profileInfo = {
+    id: 'Loading...',
     name: 'Loading...',
-    description: 'Loading...',
+    about: 'Loading...',
+    avatar: 'Loading...'
 }

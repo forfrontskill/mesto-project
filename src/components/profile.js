@@ -1,6 +1,7 @@
-import { openPopup, closePopup, showLoading, hideLoading} from './modal.js';
+import { openPopup, closePopup, showLoading, hideLoading } from './modal.js';
 import { profileInfo } from './store/store.js';
 import { fetchGetUser, fetchUpdateUser, fetchUpdateAvatar } from './api.js';
+import { uploadCards } from './card.js';
 
 const docPage = document.querySelector('.page');
 const docContent = document.querySelector('.content');
@@ -18,19 +19,26 @@ const formProfile = docProfilePopup.querySelector('.form-popup');
 export const renderProfile = () => {
 
     fetchGetUser()
-        .then(({ name, about, avatar }) => {
-            updateProfileInfo(name, about, avatar);
+        .then(({_id, name, about, avatar }) => {
+            updateProfileInfo(_id,name, about, avatar);
+        }).then(() => {
+            uploadCards();
         })
         .catch((error => console.log(error)));
 }
 
-const updateProfileInfo = (name, about, avatar) => {
+const updateProfileInfo = (id, name, about, avatar) => {
     docProfileName.textContent = name;
     docProfileDescription.textContent = about;
-    profileInfo.name = name;
-    profileInfo.description = about;
-    console.log(avatar);
+    storeProfileUpdate({id, name, about, avatar});
     docAvatar.style.backgroundImage = `url(${avatar})`;
+}
+
+const storeProfileUpdate = ({ id, name, about, avatar }) => {
+    profileInfo.id = id;
+    profileInfo.name = name;
+    profileInfo.about = about;
+    profileInfo.avatar = avatar;
 }
 
 const uploadProfilePopup = (name, description) => {
@@ -43,19 +51,19 @@ function saveProfile(evt) {
     showLoading(docProfilePopup)
     const fields = Object.fromEntries(new FormData(evt.target));
     fetchUpdateUser({ name: fields.name, about: fields.profile })
-    .then(({name, about, avatar})=>{
-        updateProfileInfo(name, about, avatar);
-    })
-    .catch((error => console.log(error)))
-    .finally(()=>{
-        closePopup(docProfilePopup);
-        hideLoading(docProfilePopup);
-    })
+        .then(({_id, name, about, avatar }) => {
+            updateProfileInfo(_id,name, about, avatar);
+            closePopup(docProfilePopup);
+        })
+        .catch((error => console.log(error)))
+        .finally(() => {
+            hideLoading(docProfilePopup);
+        })
 }
 
 const editProfileButton = docProfile.querySelector('.profile__button-edit');
 editProfileButton.addEventListener('click', () => {
-    uploadProfilePopup(profileInfo.name, profileInfo.description);
+    uploadProfilePopup(profileInfo.name, profileInfo.about);
     openPopup(docProfilePopup);
 });
 
@@ -75,12 +83,12 @@ docAvatarPopupForm.addEventListener('submit', (evt) => {
     showLoading(docAvatarPopup);
     const avatar = docAvatarPopupForm.elements.linkInput.value;
     fetchUpdateAvatar(avatar)
-        .then(({ name, about, avatar }) => {
-            updateProfileInfo(name, about, avatar);
+        .then(({ _id, name, about, avatar }) => {
+            updateProfileInfo(_id, name, about, avatar);
             closePopup(docAvatarPopup);
         })
         .catch((error => console.log(error)))
-        .finally(()=>{
+        .finally(() => {
             hideLoading(docAvatarPopup);
         });
 });

@@ -1,6 +1,7 @@
 import { initValidationSubmitButton } from './validate.js';
 import { openPopup, closePopup, showLoading, hideLoading } from './modal.js';
 import { fetchGetCards, fetchAddCard, fetchDeleteCard, fetchGetUser, fetchLikeCard, fetchDislikeCard } from './api.js';
+import { profileInfo } from './store/store.js';
 
 const docPage = document.querySelector('.page');
 const docContent = document.querySelector('.content');
@@ -15,32 +16,22 @@ const cardTemplate = document.querySelector('#card-template').content;
 const formCard = docCardPopup.querySelector('.form-popup');
 formCard.addEventListener('submit', saveCardEvent);
 
-let userId = '';
-
 export const uploadCards = () => {
-
-    fetchGetUser()
-        .then(({ _id }) => {
-            userId = _id;
-        }).then(() => {
-            fetchGetCards()
-                .then(cards => {
-                    cards.forEach(({ _id, name, link, likes }) => {
-                        const { likeCount, isUserLiked } = likeInfo(likes);
-                        const createdCard = createCardElement({ cardId: _id, name, link, imageDescription: name, favorite: isUserLiked, likeCount });
-                        addCardIntoPage(createdCard);
-                    })
-                })
+    fetchGetCards()
+        .then(cards => {
+            cards.forEach(({ _id, name, link, likes, owner }) => {
+                const ownerId = owner._id;
+                const { likeCount, isUserLiked, activeDelete } = initCardInfo({ likes, ownerId });
+                const createdCard = createCardElement({ cardId: _id, name, link, imageDescription: name, favorite: isUserLiked, likeCount, activeDelete });
+                addCardIntoPage(createdCard);
+            })
         })
         .catch((error => console.log(error)));
-
-
-
 }
 
-const createCardElement = ({ cardId, name, link, imageDescription, favorite, likeCount }) => {
+const createCardElement = ({ cardId, name, link, imageDescription, favorite, likeCount, activeDelete }) => {
     const card = cardTemplate.querySelector('.element').cloneNode(true);
-    const updatedCard = updateCard(card, { cardId, name, link, imageDescription, favorite, likeCount });
+    const updatedCard = updateCard(card, { cardId, name, link, imageDescription, favorite, likeCount, activeDelete });
 
     const button = updatedCard.querySelector('.element__button-like');
     button.addEventListener('click', toggleCardToFavorite, false);
@@ -59,26 +50,29 @@ const toggleCardToFavorite = (event) => {
 
     if (event.currentTarget.classList.contains('element__button-like_active')) {
         fetchDislikeCard(card.cardId)
-            .then(({ _id, name, link, likes }) => {
-                const { likeCount, isUserLiked } = likeInfo(likes);
-                updateCard(card, { cardId: _id, name, link, imageDescription: name, favorite: isUserLiked, likeCount });
+            .then(({ _id, name, link, likes, owner }) => {
+                const ownerId = owner._id;
+                const { likeCount, isUserLiked, activeDelete } = initCardInfo({ likes, ownerId });
+                updateCard(card, { cardId: _id, name, link, imageDescription: name, favorite: isUserLiked, likeCount, activeDelete });
             })
     } else {
         fetchLikeCard(card.cardId)
-            .then(({ _id, name, link, likes }) => {
-                const { likeCount, isUserLiked } = likeInfo(likes);
-                updateCard(card, { cardId: _id, name, link, imageDescription: name, favorite: isUserLiked, likeCount });
+            .then(({ _id, name, link, likes, owner }) => {
+                const ownerId = owner._id;
+                const { likeCount, isUserLiked, activeDelete } = initCardInfo({ likes, ownerId });
+                updateCard(card, { cardId: _id, name, link, imageDescription: name, favorite: isUserLiked, likeCount, activeDelete });
             })
     }
 }
 
-const likeInfo = (likes) => {
+const initCardInfo = ({ likes, ownerId }) => {
+    const activeDelete = ownerId === profileInfo.id;
     const likeCount = likes.length;
-    const isUserLiked = likes.some(like => like._id === userId);
-    return { likeCount, isUserLiked };
+    const isUserLiked = likes.some(like => like._id === profileInfo.id);
+    return { likeCount, isUserLiked, activeDelete };
 }
 
-const updateCard = (card, { cardId, name, link, imageDescription, favorite, likeCount }) => {
+const updateCard = (card, { cardId, name, link, imageDescription, favorite, likeCount, activeDelete }) => {
     card.cardId = cardId;
     const cardImage = card.querySelector('.element__image');
     cardImage.src = link;
@@ -92,11 +86,27 @@ const updateCard = (card, { cardId, name, link, imageDescription, favorite, like
     } else {
         card.querySelector('.element__button-like').classList.remove('element__button-like_active');
     }
+
+    const deleteButton = card.querySelector('.element__button-delete');
+    if (activeDelete) {
+        showDeleteCardButton(deleteButton);
+    } else {
+        hideDeleteCardButton(deleteButton);
+    }
+
     const likes = card.querySelector('.element__count-like');
     likes.textContent = likeCount;
 
     return card;
 };
+
+const hideDeleteCardButton = (button) => {
+    button.classList.add('element__button-delete_disable');
+}
+
+const showDeleteCardButton = (button) => {
+    button.classList.remove('element__button-delete_disable');
+}
 
 function saveCardEvent(event) {
     event.preventDefault();
@@ -114,15 +124,16 @@ function saveCardEvent(event) {
     }
 
     fetchAddCard({ name: cardName, link: cardImageLink })
-        .then(({ _id,name, link }) => {
-            const cardElement = createCardElement({cardId: _id, name, link, imageDescription: name, favorite: false, likeCount:0 });
+        .then(({ _id, name, link }) => {
+
+            const cardElement = createCardElement({ cardId: _id, name, link, imageDescription: name, favorite: false, likeCount: 0, activeDelete: true });
 
             addCardIntoPage(cardElement);
+            closePopup(docCardPopup);
+            event.target.reset();
         })
         .catch((error => console.log(error)))
         .finally(() => {
-            event.target.reset();
-            closePopup(docCardPopup);
             hideLoading(docCardPopup);
         });
 }
@@ -140,7 +151,6 @@ const openCardImagePopup = (event) => {
 
 const deleteCard = (event) => {
     const card = event.target.closest('.element');
-    console.log(card.cardId);
     fetchDeleteCard(card.cardId)
         .then((res) => {
             card.remove();
