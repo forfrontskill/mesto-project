@@ -1,4 +1,4 @@
-var validationClassNames = {
+const validationClassNames = {
     inputSelector: '',
     submitButtonSelector: '',
     inactiveButtonClass: '',
@@ -13,8 +13,13 @@ export const enableValidation = ({
     inputErrorClass = 'form-popup__text-input_error',
     errorClass = 'form-popup__input-error_active'
 })=>{
-    validationClassNames = {...validationClassNames, inputSelector, submitButtonSelector,inactiveButtonClass,inputErrorClass,errorClass};
-    
+    validationClassNames.inputSelector = inputSelector;
+    validationClassNames.submitButtonSelector = submitButtonSelector;
+    validationClassNames.inactiveButtonClass = inactiveButtonClass;
+    validationClassNames.inputErrorClass = inputErrorClass;
+    validationClassNames.errorClass = errorClass;
+
+
     const forms = document.forms;
     Array.from(forms).forEach(form => {
         const inputs = form.querySelectorAll(validationClassNames.inputSelector);
@@ -42,10 +47,10 @@ const isValid = (input) => {
     }
 };
 
-const validationForm = (inputs) => Array.from(inputs).some((input) => !input.validity.valid);
+const isFormValid = (inputs) => Array.from(inputs).some((input) => !input.validity.valid);
 
 const toggleFormSubmitButton = (inputs, button) => {
-    if (validationForm(inputs)) {
+    if (isFormValid(inputs)) {
         disableSubmitButton(button);
     } else {
         activeSubmitButton(button);
@@ -71,7 +76,7 @@ const hideError = (input) => {
 
 export const initValidationSubmitButton = (form)=>{
     const inputs = form.querySelectorAll(validationClassNames.inputSelector);
-    const validationResult = validationForm(inputs);
+    const validationResult = isFormValid(inputs);
     if(validationResult){
         const submitButton = form.querySelector(validationClassNames.submitButtonSelector);
         disableSubmitButton(submitButton);

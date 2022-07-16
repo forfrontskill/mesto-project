@@ -1,13 +1,13 @@
 export const openPopup = (popup) => {
     popup.classList.add('popup_visible');
     popup.addEventListener('click', closePopupOutside);
-    document.addEventListener('keydown', closePopupOutsideByEscape);
+    document.addEventListener('mousedown', closePopupOutsideByEscape);
 }
 
 export const closePopup = (popup) => {
     popup.classList.remove('popup_visible');
     popup.removeEventListener('click', closePopupOutside);
-    document.removeEventListener('keydown', closePopupOutsideByEscape);
+    document.removeEventListener('mousedown', closePopupOutsideByEscape);
 }
 
 export const closePopupOutsideByEscape = (evt) => {
@@ -35,12 +35,3 @@ export const subscribeCloseAllPopup = () => {
     })
 }
 
-export const showLoading = (popup) => {
-    const submitButton = popup.querySelector('.form-popup__button-save');
-    submitButton.textContent = 'Сохранение...'
-}
-
-export const hideLoading = (popup) => {
-    const submitButton = popup.querySelector('.form-popup__button-save');
-    submitButton.textContent = 'Сохранить'
-}
