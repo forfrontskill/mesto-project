@@ -1,6 +1,7 @@
 import { initValidationSubmitButton } from './validate.js';
-import { openPopup, closePopup, showLoading, hideLoading } from './modal.js';
-import { fetchGetCards, fetchAddCard, fetchDeleteCard, fetchGetUser, fetchLikeCard, fetchDislikeCard } from './api.js';
+import { openPopup, closePopup } from './modal.js';
+import { showLoading, hideLoading } from './utils.js';
+import { getCards, addCard, deleteCard, likeCard, dislikeCard } from './api.js';
 import { profileInfo } from './store/store.js';
 
 const docPage = document.querySelector('.page');
@@ -16,17 +17,13 @@ const cardTemplate = document.querySelector('#card-template').content;
 const formCard = docCardPopup.querySelector('.form-popup');
 formCard.addEventListener('submit', saveCardEvent);
 
-export const uploadCards = () => {
-    fetchGetCards()
-        .then(cards => {
-            cards.forEach(({ _id, name, link, likes, owner }) => {
-                const ownerId = owner._id;
-                const { likeCount, isUserLiked, activeDelete } = initCardInfo({ likes, ownerId });
-                const createdCard = createCardElement({ cardId: _id, name, link, imageDescription: name, favorite: isUserLiked, likeCount, activeDelete });
-                addCardIntoPage(createdCard);
-            })
-        })
-        .catch((error => console.log(error)));
+export const uploadCards = (cards) => {
+    cards.forEach(({ _id, name, link, likes, owner }) => {
+        const ownerId = owner._id;
+        const { likeCount, isUserLiked, activeDelete } = initCardInfo({ likes, ownerId });
+        const createdCard = createCardElement({ cardId: _id, name, link, imageDescription: name, favorite: isUserLiked, likeCount, activeDelete });
+        addCardIntoPage(createdCard);
+    })
 }
 
 const createCardElement = ({ cardId, name, link, imageDescription, favorite, likeCount, activeDelete }) => {
@@ -49,19 +46,21 @@ const toggleCardToFavorite = (event) => {
     const card = event.target.closest('.element');
 
     if (event.currentTarget.classList.contains('element__button-like_active')) {
-        fetchDislikeCard(card.cardId)
+        dislikeCard(card.cardId)
             .then(({ _id, name, link, likes, owner }) => {
                 const ownerId = owner._id;
                 const { likeCount, isUserLiked, activeDelete } = initCardInfo({ likes, ownerId });
                 updateCard(card, { cardId: _id, name, link, imageDescription: name, favorite: isUserLiked, likeCount, activeDelete });
             })
+            .catch((error => console.log(error)));
     } else {
-        fetchLikeCard(card.cardId)
+        likeCard(card.cardId)
             .then(({ _id, name, link, likes, owner }) => {
                 const ownerId = owner._id;
                 const { likeCount, isUserLiked, activeDelete } = initCardInfo({ likes, ownerId });
                 updateCard(card, { cardId: _id, name, link, imageDescription: name, favorite: isUserLiked, likeCount, activeDelete });
             })
+            .catch((error => console.log(error)));
     }
 }
 
@@ -81,10 +80,11 @@ const updateCard = (card, { cardId, name, link, imageDescription, favorite, like
 
     card.querySelector('.element__name').textContent = name;
 
+    const likeButton = card.querySelector('.element__button-like');
     if (favorite) {
-        card.querySelector('.element__button-like').classList.add('element__button-like_active');
+        likeButton.classList.add('element__button-like_active');
     } else {
-        card.querySelector('.element__button-like').classList.remove('element__button-like_active');
+        likeButton.classList.remove('element__button-like_active');
     }
 
     const deleteButton = card.querySelector('.element__button-delete');
@@ -110,7 +110,7 @@ const showDeleteCardButton = (button) => {
 
 function saveCardEvent(event) {
     event.preventDefault();
-    showLoading(docCardPopup);
+    showLoading(event.submitter);
     const fields = Object.fromEntries(new FormData(event.target));
 
     const cardName = fields['card-name'];
@@ -123,7 +123,7 @@ function saveCardEvent(event) {
         favorite: false,
     }
 
-    fetchAddCard({ name: cardName, link: cardImageLink })
+    addCard({ name: cardName, link: cardImageLink })
         .then(({ _id, name, link }) => {
 
             const cardElement = createCardElement({ cardId: _id, name, link, imageDescription: name, favorite: false, likeCount: 0, activeDelete: true });
@@ -134,7 +134,7 @@ function saveCardEvent(event) {
         })
         .catch((error => console.log(error)))
         .finally(() => {
-            hideLoading(docCardPopup);
+            hideLoading(event.submitter);
         });
 }
 
@@ -149,9 +149,9 @@ const openCardImagePopup = (event) => {
     openPopup(docCardImagePopup);
 }
 
-const deleteCard = (event) => {
+const deleteCardEvent = (event) => {
     const card = event.target.closest('.element');
-    fetchDeleteCard(card.cardId)
+    deleteCard(card.cardId)
         .then((res) => {
             card.remove();
         })
@@ -166,7 +166,7 @@ const subscribeCardImagePopupOpen = (cardElement) => {
 
 const subscribeDeleteCardButton = (cardElement) => {
     const deleteButton = cardElement.querySelector('.element__button-delete');
-    deleteButton.addEventListener('click', deleteCard);
+    deleteButton.addEventListener('click', deleteCardEvent);
 }
 
 const addCardButton = docPage.querySelector('.profile__button-add');

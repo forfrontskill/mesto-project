@@ -1,5 +1,5 @@
 import { enableValidation } from './components/validate.js';
-import { renderProfile } from './components/profile.js';
+import { startRender } from './components/profile.js';
 import { subscribeCloseAllPopup } from './components/modal.js';
 
 import './pages/index.css';
@@ -13,6 +13,6 @@ const validationClass = {
 };
 
 enableValidation(validationClass);
-renderProfile();
 subscribeCloseAllPopup();
+startRender();
 

@@ -5,14 +5,14 @@ const headers = {
     'Content-Type': 'application/json'
 };
 
-export const fetchGetUser = () => {
+export const getUser = () => {
     return fetch(`${baseUrl}/users/me`, {
         headers
     })
         .then(checkResponse)
 }
 
-export const fetchUpdateUser = ({ name, about }) => {
+export const updateUser = ({ name, about }) => {
     return fetch(`${baseUrl}/users/me`, {
         method: 'PATCH',
         headers,
@@ -24,14 +24,14 @@ export const fetchUpdateUser = ({ name, about }) => {
         .then(checkResponse)
 }
 
-export const fetchGetCards = () => {
+export const getCards = () => {
     return fetch(`${baseUrl}/cards`, {
         headers
     })
         .then(checkResponse)
 }
 
-export const fetchAddCard = ({ name, link }) => {
+export const addCard = ({ name, link }) => {
     return fetch(`${baseUrl}/cards`, {
         method: 'POST',
         headers,
@@ -43,7 +43,7 @@ export const fetchAddCard = ({ name, link }) => {
         .then(checkResponse);
 }
 
-export const fetchDeleteCard = (cardId) => {
+export const deleteCard = (cardId) => {
     return fetch(`${baseUrl}/cards/${cardId}`, {
         method: 'DELETE',
         headers,
@@ -51,7 +51,7 @@ export const fetchDeleteCard = (cardId) => {
         .then(checkResponse);
 }
 
-export const fetchLikeCard = (cardId) => {
+export const likeCard = (cardId) => {
     return fetch(`${baseUrl}/cards/likes/${cardId}`, {
         method: 'PUT',
         headers
@@ -59,7 +59,7 @@ export const fetchLikeCard = (cardId) => {
         .then(checkResponse);
 }
 
-export const fetchDislikeCard = (cardId) => {
+export const dislikeCard = (cardId) => {
     return fetch(`${baseUrl}/cards/likes/${cardId}`, {
         method: 'DELETE',
         headers
@@ -67,7 +67,7 @@ export const fetchDislikeCard = (cardId) => {
         .then(checkResponse);
 }
 
-export const fetchUpdateAvatar = (avatar) => {
+export const updateAvatar = (avatar) => {
     return fetch(`${baseUrl}/users/me/avatar`, {
         method: 'PATCH',
         headers,
