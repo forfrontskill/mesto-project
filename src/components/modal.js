@@ -1,13 +1,13 @@
 export const openPopup = (popup) => {
     popup.classList.add('popup_visible');
-    popup.addEventListener('click', closePopupOutside);
-    document.addEventListener('mousedown', closePopupOutsideByEscape);
+    popup.addEventListener('mousedown', closePopupOutside);
+    document.addEventListener('keydown', closePopupOutsideByEscape);
 }
 
 export const closePopup = (popup) => {
     popup.classList.remove('popup_visible');
-    popup.removeEventListener('click', closePopupOutside);
-    document.removeEventListener('mousedown', closePopupOutsideByEscape);
+    popup.removeEventListener('mousedown', closePopupOutside);
+    document.removeEventListener('keydown', closePopupOutsideByEscape);
 }
 
 export const closePopupOutsideByEscape = (evt) => {

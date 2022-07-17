@@ -1,3 +1,4 @@
+import { initValidationSubmitButton } from './validate.js';
 import { openPopup, closePopup } from './modal.js';
 import { showLoading, hideLoading } from './utils.js';
 import { profileInfo } from './store/store.js';
@@ -70,7 +71,9 @@ editProfileButton.addEventListener('click', () => {
 formProfile.addEventListener('submit', saveProfile);
 
 docAvatarButton.addEventListener('click', (evt) => {
+            docAvatarPopupForm.elements.linkInput.value = '';
             openPopup(docAvatarPopup);
+            initValidationSubmitButton(docAvatarPopupForm);
 });
 
 docAvatarPopupForm.addEventListener('submit', (evt) => {
