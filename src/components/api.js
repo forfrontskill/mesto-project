@@ -1,86 +1,106 @@
-const tokenId = '0b2a6895-6ec2-4474-a82a-666be5c4ddd6';
-const baseUrl = 'https://mesto.nomoreparties.co/v1/plus-cohort-12';
-const headers = {
-    authorization: tokenId,
-    'Content-Type': 'application/json'
-};
-
-export const getUser = () => {
-    return fetch(`${baseUrl}/users/me`, {
-        headers
-    })
-        .then(checkResponse)
-}
-
-export const updateUser = ({ name, about }) => {
-    return fetch(`${baseUrl}/users/me`, {
-        method: 'PATCH',
-        headers,
-        body: JSON.stringify({
-            name,
-            about
-        })
-    })
-        .then(checkResponse)
-}
-
-export const getCards = () => {
-    return fetch(`${baseUrl}/cards`, {
-        headers
-    })
-        .then(checkResponse)
-}
-
-export const addCard = ({ name, link }) => {
-    return fetch(`${baseUrl}/cards`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-            name,
-            link
-        })
-    })
-        .then(checkResponse);
-}
-
-export const deleteCard = (cardId) => {
-    return fetch(`${baseUrl}/cards/${cardId}`, {
-        method: 'DELETE',
-        headers,
-    })
-        .then(checkResponse);
-}
-
-export const likeCard = (cardId) => {
-    return fetch(`${baseUrl}/cards/likes/${cardId}`, {
-        method: 'PUT',
-        headers
-    })
-        .then(checkResponse);
-}
-
-export const dislikeCard = (cardId) => {
-    return fetch(`${baseUrl}/cards/likes/${cardId}`, {
-        method: 'DELETE',
-        headers
-    })
-        .then(checkResponse);
-}
-
-export const updateAvatar = (avatar) => {
-    return fetch(`${baseUrl}/users/me/avatar`, {
-        method: 'PATCH',
-        headers,
-        body: JSON.stringify({
-            avatar
-        })
-    })
-        .then(checkResponse);
-}
-
-const checkResponse = (res) => {
-    if (res.ok) {
-        return res.json();
+const config = {
+    tokenId: '0b2a6895-6ec2-4474-a82a-666be5c4ddd6',
+    baseUrl: 'https://mesto.nomoreparties.co/v1/plus-cohort-12',
+    headers: {
+        authorization: tokenId,
+        'Content-Type': 'application/json'
     }
-    return Promise.reject(`Ошибка: ${res.status}`);
 }
+
+class Api {
+    constructor({tokenId, baseUrl, headers}){
+        this._tokenId = tokenId;
+        this._baseUrl = baseUrl;
+        this._headers = headers;
+    }
+
+    getUser(){
+        return fetch(`${this._baseUrl}/users/me`, {
+            headers: this._headers
+        })
+            .then(this._checkResponse)
+    }
+
+    updateUser({ name, about }){
+        return fetch(`${this._baseUrl}/users/me`, {
+            method: 'PATCH',
+            headers: this._headers,
+            body: JSON.stringify({
+                name,
+                about
+            })
+        })
+            .then(this._checkResponse)
+    }
+
+    getCards() {
+        return fetch(`${this._baseUrl}/cards`, {
+            headers: this._headers
+        })
+            .then(this._checkResponse)
+    }
+
+    addCard({ name, link }){
+        return fetch(`${this._baseUrl}/cards`, {
+            method: 'POST',
+            headers: this._headers,
+            body: JSON.stringify({
+                name,
+                link
+            })
+        })
+            .then(this._checkResponse);
+    }
+
+    deleteCard(cardId){
+        return fetch(`${this._baseUrl}/cards/${cardId}`, {
+            method: 'DELETE',
+            headers: this._headers,
+        })
+            .then(this._checkResponse);
+    }
+
+    likeCard(cardId){
+        return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+            method: 'PUT',
+            headers: this._headers,
+        })
+            .then(this._checkResponse);
+    }
+    
+    dislikeCard(cardId){
+        return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+            method: 'DELETE',
+            headers: this._headers,
+        })
+            .then(this._checkResponse);
+    }
+    
+    updateAvatar(avatar){
+        return fetch(`${this._baseUrl}/users/me/avatar`, {
+            method: 'PATCH',
+            headers: this._headers,
+            body: JSON.stringify({
+                avatar
+            })
+        })
+            .then(this._checkResponse);
+    }
+    
+    _checkResponse(res){
+        if (res.ok) {
+            return res.json();
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+    }
+
+}
+
+
+
+
+
+
+
+
+
