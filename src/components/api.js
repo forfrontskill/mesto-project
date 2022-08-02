@@ -7,7 +7,7 @@ const config = {
     }
 }
 
-class Api {
+export class Api {
     constructor({tokenId, baseUrl, headers}){
         this._tokenId = tokenId;
         this._baseUrl = baseUrl;
