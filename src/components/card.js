@@ -3,6 +3,7 @@ import { openPopup, closePopup } from './modal.js';
 import { showLoading, hideLoading } from './utils.js';
 import { getCards, addCard, deleteCard, likeCard, dislikeCard } from './api.js';
 import { profileInfo } from './store/store.js';
+import PopupWithImage from './PopupWithImage.js';
 
 const docPage = document.querySelector('.page');
 const docContent = document.querySelector('.content');
@@ -131,7 +132,9 @@ export class Card {
         docPopupCardImage.alt = imageElement.alt;
     
         docPopupCardImageDescription.textContent = imageElement.alt;
-    
+        
+        PopupWithImage.open();
+
         openPopup(docCardImagePopup);
     }
 
