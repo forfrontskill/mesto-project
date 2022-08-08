@@ -5,10 +5,11 @@ const profileInfo = {
     avatar: 'Loading...'
 }
 
-const cardTemplate = document.querySelector('#card-template').content;
-
 export default class Card {
-    constructor({ cardId, name, link, imageDescription, favorite, likeCount, activeDelete }, selector, handleCardClick) {
+    constructor({ cardId, name, link, imageDescription, favorite, owner, likes }, selector, handleCardClick) {
+        this.ownerId = owner._id;
+        const { likeCount, isUserLiked, activeDelete } = this._initCardInfo({ likes, ownerId: this.ownerId })
+
         this._cardId = cardId;
         this._name = name;
         this._link = link;
@@ -21,8 +22,8 @@ export default class Card {
     }
 
     createCardElement() {
-        const card = cardTemplate.querySelector(this._selector).cloneNode(true);
-        const updatedCard = _updateCard(card, {
+        const card = document.querySelector(this._selector).content.cloneNode(true);
+        const updatedCard = this._updateCard(card, {
             cardId: this._cardId,
             name: this._name,
             link: this._link,
@@ -33,12 +34,13 @@ export default class Card {
         });
 
         const button = updatedCard.querySelector('.element__button-like');
-        button.addEventListener('click', toggleCardToFavorite, false);
+        button.addEventListener('click', this._toggleCardToFavorite, false);
 
         return card;
     }
 
     _updateCard(card, { cardId, name, link, imageDescription, favorite, likeCount, activeDelete }) {
+        
         card.cardId = cardId;
         const cardImage = card.querySelector('.element__image');
         cardImage.src = link;

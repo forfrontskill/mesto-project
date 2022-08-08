@@ -3,7 +3,7 @@ import FormValidator from './components/FormValidator.js';
 import PopupWithImage from './components/PopupWithImage.js';
 import PopupWithForm from './components/PopupWithForm.js';
 import './pages/index.css';
-import Api from './components/api.js';
+import Api from './components/Api.js';
 import UserInfo from './components/UserInfo.js';
 import Section from './components/Section.js';
 
@@ -19,14 +19,52 @@ const validationClass = {
     errorClass: 'form-popup__input-error_active'
 };
 
+const tokenId = '0b2a6895-6ec2-4474-a82a-666be5c4ddd6';
+
 const config = {
-    tokenId: '0b2a6895-6ec2-4474-a82a-666be5c4ddd6',
+    tokenId,
     baseUrl: 'https://mesto.nomoreparties.co/v1/plus-cohort-12',
     headers: {
         authorization: tokenId,
         'Content-Type': 'application/json'
     }
 }
+
+
+
+const api = new Api(config);
+
+
+api.getCards()
+.then(cards=> {
+    const cardSection = new Section({items: cards, renderer: (item)=>{
+            const card = new Card(item, '#card-template', ()=>{console.log()});
+            return card.createCardElement();
+    } }, '.elements');
+
+    cardSection.renderAllItems();
+
+})
+.catch(error => console.log(error));
+
+
+const userInfo = new UserInfo({ userNameSelector: '.profile__name', userAboutSelector: '.profile__description', userAvatarSelector: '.profile__avatar'});
+userInfo.getUserInfo(()=>{
+    return api.getUser()
+    .then(user => {
+        console.log(user);
+        return user;
+    })
+    .catch(error => console.log(error));
+})
+
+
+api.getUser()
+    .then(user => {
+        userInfo.setUserInfo(user);
+    })
+    .catch(error => console.log(error));
+
 
 
 
