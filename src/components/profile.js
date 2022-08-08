@@ -1,7 +1,5 @@
 import { initValidationSubmitButton } from './validate.js';
-import { openPopup, closePopup } from './modal.js';
 import { showLoading, hideLoading } from './utils.js';
-import { profileInfo } from './store/store.js';
 import { getUser, updateUser, updateAvatar, getCards } from './api.js';
 import { uploadCards } from './card.js';
 
@@ -11,12 +9,10 @@ const docProfile = docContent.querySelector('.profile');
 const docProfileName = docProfile.querySelector('.profile__name');
 const docProfileDescription = docProfile.querySelector('.profile__description');
 const docProfilePopup = docPage.querySelector('#popup-profile');
-const docAvatarPopup = docPage.querySelector('#popup-profile-avatar');
 const docAvatarPopupForm = document.forms.avatarEdit;
 const docAvatar = docProfile.querySelector('.profile__avatar');
 const docAvatarButton = docProfile.querySelector('.profile__button-avatar');
 const formProfile = docProfilePopup.querySelector('.form-popup');
-
 
 export const startRender = () => {
     Promise.all([getUser(), getCards()])
@@ -54,7 +50,7 @@ function saveProfile(evt) {
     updateUser({ name: fields.name, about: fields.profile })
         .then((user) => {
             updateProfileInfo(user);
-            closePopup(docProfilePopup);
+            
         })
         .catch((error => console.log(error)))
         .finally(() => {
@@ -65,14 +61,14 @@ function saveProfile(evt) {
 const editProfileButton = docProfile.querySelector('.profile__button-edit');
 editProfileButton.addEventListener('click', () => {
     uploadProfilePopup(profileInfo.name, profileInfo.about);
-    openPopup(docProfilePopup);
+    
 });
 
 formProfile.addEventListener('submit', saveProfile);
 
 docAvatarButton.addEventListener('click', (evt) => {
             docAvatarPopupForm.elements.linkInput.value = '';
-            openPopup(docAvatarPopup);
+            
             initValidationSubmitButton(docAvatarPopupForm);
 });
 
@@ -83,7 +79,7 @@ docAvatarPopupForm.addEventListener('submit', (evt) => {
     updateAvatar(avatar)
         .then((user) => {
             updateProfileInfo(user);
-            closePopup(docAvatarPopup);
+            
         })
         .catch((error => console.log(error)))
         .finally(() => {

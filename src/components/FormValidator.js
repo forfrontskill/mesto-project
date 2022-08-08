@@ -1,12 +1,3 @@
-const validationClassNames = {
-    inputSelector: '',
-    submitButtonSelector: '',
-    inactiveButtonClass: '',
-    inputErrorClass: '',
-    errorClass: '',
-}
-
-
 export default class FormValidator {
     constructor({
         inputSelector = '.form-popup__text-input',

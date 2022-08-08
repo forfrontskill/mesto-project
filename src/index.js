@@ -1,8 +1,15 @@
-import { enableValidation } from './components/validate.js';
-import { startRender } from './components/profile.js';
-import { subscribeCloseAllPopup } from './components/modal.js';
-
+import Card from './components/Card.js';
+import FormValidator from './components/FormValidator.js';
+import PopupWithImage from './components/PopupWithImage.js';
+import PopupWithForm from './components/PopupWithForm.js';
 import './pages/index.css';
+import Api from './components/api.js';
+import UserInfo from './components/UserInfo.js';
+import Section from './components/Section.js';
+
+const profileNameSelector = '.profile__name';
+const profileDescriptionSelector = '.profile__description';
+const cardSectionSelector = '.elements';
 
 const validationClass = {
     inputSelector: '.form-popup__text-input',
@@ -12,7 +19,15 @@ const validationClass = {
     errorClass: 'form-popup__input-error_active'
 };
 
-enableValidation(validationClass);
-subscribeCloseAllPopup();
-startRender();
+const config = {
+    tokenId: '0b2a6895-6ec2-4474-a82a-666be5c4ddd6',
+    baseUrl: 'https://mesto.nomoreparties.co/v1/plus-cohort-12',
+    headers: {
+        authorization: tokenId,
+        'Content-Type': 'application/json'
+    }
+}
+
+
+
 

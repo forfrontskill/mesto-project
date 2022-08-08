@@ -1,27 +1,18 @@
-const config = {
-    tokenId: '0b2a6895-6ec2-4474-a82a-666be5c4ddd6',
-    baseUrl: 'https://mesto.nomoreparties.co/v1/plus-cohort-12',
-    headers: {
-        authorization: tokenId,
-        'Content-Type': 'application/json'
-    }
-}
-
-export class Api {
-    constructor({tokenId, baseUrl, headers}){
+export default class Api {
+    constructor({ tokenId, baseUrl, headers }) {
         this._tokenId = tokenId;
         this._baseUrl = baseUrl;
         this._headers = headers;
     }
 
-    getUser(){
+    getUser() {
         return fetch(`${this._baseUrl}/users/me`, {
             headers: this._headers
         })
             .then(this._checkResponse)
     }
 
-    updateUser({ name, about }){
+    updateUser({ name, about }) {
         return fetch(`${this._baseUrl}/users/me`, {
             method: 'PATCH',
             headers: this._headers,
@@ -40,7 +31,7 @@ export class Api {
             .then(this._checkResponse)
     }
 
-    addCard({ name, link }){
+    addCard({ name, link }) {
         return fetch(`${this._baseUrl}/cards`, {
             method: 'POST',
             headers: this._headers,
@@ -52,7 +43,7 @@ export class Api {
             .then(this._checkResponse);
     }
 
-    deleteCard(cardId){
+    deleteCard(cardId) {
         return fetch(`${this._baseUrl}/cards/${cardId}`, {
             method: 'DELETE',
             headers: this._headers,
@@ -60,23 +51,23 @@ export class Api {
             .then(this._checkResponse);
     }
 
-    likeCard(cardId){
+    likeCard(cardId) {
         return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
             method: 'PUT',
             headers: this._headers,
         })
             .then(this._checkResponse);
     }
-    
-    dislikeCard(cardId){
+
+    dislikeCard(cardId) {
         return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
             method: 'DELETE',
             headers: this._headers,
         })
             .then(this._checkResponse);
     }
-    
-    updateAvatar(avatar){
+
+    updateAvatar(avatar) {
         return fetch(`${this._baseUrl}/users/me/avatar`, {
             method: 'PATCH',
             headers: this._headers,
@@ -86,8 +77,8 @@ export class Api {
         })
             .then(this._checkResponse);
     }
-    
-    _checkResponse(res){
+
+    _checkResponse(res) {
         if (res.ok) {
             return res.json();
         }
