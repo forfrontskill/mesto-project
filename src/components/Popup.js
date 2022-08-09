@@ -5,7 +5,8 @@ export default class Popup {
     }
 
     open() {
-        this.popup.classList.add('popup_visible');
+        const x = document.querySelector("#popup-card");
+        x.classList.add('popup_visible');
     }
 
     close() {
@@ -34,7 +35,7 @@ export default class Popup {
             }
         })
 
-        this.popup.addEventListener('mousedown', this._closePopupOutside);
-        document.addEventListener('keydown', this._handleEscClose);
+        this.popup.addEventListener('mousedown', this._closePopupOutside.bind(this));
+        document.addEventListener('keydown', this._handleEscClose.bind(this));
     }
 }

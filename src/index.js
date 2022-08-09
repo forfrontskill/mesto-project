@@ -30,32 +30,38 @@ const config = {
     }
 }
 
+const imagePopup = new PopupWithImage('#popup-card-image');
+imagePopup.setEventListeners();
 
+const addImagePopup = new PopupWithForm('#popup-card', () => { console.log('TEST') });
+addImagePopup.setEventListeners();
 
 const api = new Api(config);
 
-
 api.getCards()
-.then(cards=> {
-    const cardSection = new Section({items: cards, renderer: (item)=>{
-            const card = new Card(item, '#card-template', ()=>{console.log()});
-            return card.createCardElement();
-    } }, '.elements');
+    .then(cards => {
+        const cardSection = new Section({
+            items: cards, renderer: (item) => {
+                const card = new Card(item, '#card-template', (item) => {
+                    imagePopup.open(item)
+                });
+                return card.createCardElement();
+            }
+        }, '.elements');
 
-    cardSection.renderAllItems();
+        cardSection.renderAllItems();
 
-})
-.catch(error => console.log(error));
-
-
-const userInfo = new UserInfo({ userNameSelector: '.profile__name', userAboutSelector: '.profile__description', userAvatarSelector: '.profile__avatar'});
-userInfo.getUserInfo(()=>{
-    return api.getUser()
-    .then(user => {
-        console.log(user);
-        return user;
     })
     .catch(error => console.log(error));
+
+
+const userInfo = new UserInfo({ userNameSelector: '.profile__name', userAboutSelector: '.profile__description', userAvatarSelector: '.profile__avatar' });
+userInfo.getUserInfo(() => {
+    return api.getUser()
+        .then(user => {
+            return user;
+        })
+        .catch(error => console.log(error));
 })
 
 

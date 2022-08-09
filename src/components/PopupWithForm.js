@@ -2,21 +2,24 @@ import Popup from "./Popup";
 
 export default class PopupWithForm extends Popup {
     constructor(selector, submit) {
-        this.selector = selector;
+        super(selector);
         this.submit = submit;
-        this.form = popup.querySelector('.form-popup');
+        /* this.form = this.popup.querySelector('.form-popup'); */
     }
 
-    _getInputValues(){
+    _getInputValues() {
 
     }
 
-    setEventListeners(){
+    setEventListeners() {
         super.setEventListeners();
-        this.form.addEventListener('submit',this.submit);
+        const addBtn = document.querySelector('.profile__button-add');
+        addBtn.addEventListener('click', this.open.bind(this));
+        /*  this.form.addEventListener('submit', this.submit); */
     }
 
-    close(){
-        this.form.reset();
+    close() {
+        super.close();
+        /* this.form.reset(); */
     }
 }

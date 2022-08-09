@@ -19,11 +19,13 @@ export default class Card {
         this._activeDelete = activeDelete;
         this._selector = selector;
         this._handleCardClick = handleCardClick;
+        this._element = '';
+
     }
 
     createCardElement() {
         const card = document.querySelector(this._selector).content.cloneNode(true);
-        const updatedCard = this._updateCard(card, {
+        this._updateCard(card, {
             cardId: this._cardId,
             name: this._name,
             link: this._link,
@@ -33,14 +35,16 @@ export default class Card {
             activeDelete: this._activeDelete
         });
 
-        const button = updatedCard.querySelector('.element__button-like');
+        this._setEventListeners();
+
+        const button = this._element.querySelector('.element__button-like');
         button.addEventListener('click', this._toggleCardToFavorite, false);
 
-        return card;
+        return this._element;
     }
 
     _updateCard(card, { cardId, name, link, imageDescription, favorite, likeCount, activeDelete }) {
-        
+
         card.cardId = cardId;
         const cardImage = card.querySelector('.element__image');
         cardImage.src = link;
@@ -65,7 +69,7 @@ export default class Card {
         const likes = card.querySelector('.element__count-like');
         likes.textContent = likeCount;
 
-        return card;
+        this._element = card;
     };
 
     _toggleCardToFavorite(event) {
@@ -99,10 +103,10 @@ export default class Card {
     }
 
     _setEventListeners() {
-        const image = cardElement.querySelector('.element__image');
-        image.addEventListener('click', (event) => this._handleCardClick(card));
+        const image = this._element.querySelector('.element__image');
+        image.addEventListener('click', (event) => this._handleCardClick({ description: this._name, src: this._link }));
 
-        const deleteButton = cardElement.querySelector('.element__button-delete');
+        const deleteButton = this._element.querySelector('.element__button-delete');
         deleteButton.addEventListener('click', (event) => this._deleteCardEvent(event));
     }
 }
