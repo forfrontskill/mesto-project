@@ -5,8 +5,7 @@ export default class Popup {
     }
 
     open() {
-        const x = document.querySelector("#popup-card");
-        x.classList.add('popup_visible');
+        this.popup.classList.add('popup_visible');
     }
 
     close() {

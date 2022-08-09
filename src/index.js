@@ -30,32 +30,71 @@ const config = {
     }
 }
 
+//Инициализация валидации всех форм
+const addCardFormValidator = new FormValidator(validationClass, document.forms['card-create']);
+addCardFormValidator.enableValidation();
+const profileEditFormValidator = new FormValidator(validationClass, document.forms['profile-edit']);
+profileEditFormValidator.enableValidation();
+const avatarEditFormValidator = new FormValidator(validationClass, document.forms['avatarEdit']);
+avatarEditFormValidator.enableValidation();
+
+//Глобавльные классы
+const api = new Api(config);
+const cardSection = new Section({items: [], renderer: renderCard}, '.elements');
+const userInfo = new UserInfo({ userNameSelector: '.profile__name', userAboutSelector: '.profile__description', userAvatarSelector: '.profile__avatar' });
+
+const renderCard = (item) => {
+    const card = new Card(item, '#card-template', (item) => {
+        imagePopup.open(item)
+    });
+    return card.createCardElement();
+}
+
+const addCardLogic = (event, values)=>{
+    api.addCard({ name: values['card-name'], link: values['card-image-link'] })
+    .then(card => {
+        cardSection.addItem(card);
+    })
+    .catch(error => console.log(error));
+}
+
+
 const imagePopup = new PopupWithImage('#popup-card-image');
 imagePopup.setEventListeners();
 
-const addImagePopup = new PopupWithForm('#popup-card', () => { console.log('TEST') });
-addImagePopup.setEventListeners();
+//Инициализация модального окна
+const addCardPopup = new PopupWithForm('#popup-card', addCardLogic);
+addCardPopup.setEventListeners();
+const addCardBtn = document.querySelector('.profile__button-add');
+addCardBtn.addEventListener('click', (event)=>{addCardPopup.open()});
 
-const api = new Api(config);
+//Инициализация модального окна профиля
+const profileEditPopup = new PopupWithForm('#popup-profile', (event, values)=>{console.log(event); console.log(values)})
+profileEditPopup.setEventListeners();
+const profileEditBtn = document.querySelector('.profile__button-edit');
+profileEditBtn.addEventListener('click', (event)=>{profileEditPopup.open()});
 
-api.getCards()
-    .then(cards => {
-        const cardSection = new Section({
-            items: cards, renderer: (item) => {
-                const card = new Card(item, '#card-template', (item) => {
-                    imagePopup.open(item)
-                });
-                return card.createCardElement();
-            }
-        }, '.elements');
-
-        cardSection.renderAllItems();
-
-    })
-    .catch(error => console.log(error));
+//Инициализация модального окна реадктирования аватара
+const avatarEditPopup = new PopupWithForm('#popup-profile-avatar', (event, values)=>{console.log(event); console.log(values)})
+avatarEditPopup.setEventListeners();
+const avatarEditBtn = document.querySelector('.profile__button-avatar');
+avatarEditBtn.addEventListener('click', (event)=>{avatarEditPopup.open()});
 
 
-const userInfo = new UserInfo({ userNameSelector: '.profile__name', userAboutSelector: '.profile__description', userAvatarSelector: '.profile__avatar' });
+const initCards = (cards) => {
+    const cardSection = new Section({items: cards, renderer: renderCard}, '.elements');
+    cardSection.renderAllItems();
+}
+
+//Ждем загрузки профиля и карточек
+Promise.all([api.getUser(), api.getCards()])
+        .then(([user, cards]) => {
+            initCards(cards);
+            userInfo.setUserInfo(user);
+        })
+        .catch((error => console.log(error)));
+        
+
 userInfo.getUserInfo(() => {
     return api.getUser()
         .then(user => {
@@ -64,12 +103,6 @@ userInfo.getUserInfo(() => {
         .catch(error => console.log(error));
 })
 
-
-api.getUser()
-    .then(user => {
-        userInfo.setUserInfo(user);
-    })
-    .catch(error => console.log(error));
 
 
 
