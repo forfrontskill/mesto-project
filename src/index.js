@@ -40,8 +40,15 @@ avatarEditFormValidator.enableValidation();
 
 //Глобавльные классы
 const api = new Api(config);
-const cardSection = new Section({items: [], renderer: renderCard}, '.elements');
-const userInfo = new UserInfo({ userNameSelector: '.profile__name', userAboutSelector: '.profile__description', userAvatarSelector: '.profile__avatar' });
+const cardSection = new Section({ items: [], renderer: renderCard }, '.elements');
+const userInfo = new UserInfo(
+    {
+        userNameSelector: '.profile__name',
+        userAboutSelector: '.profile__description',
+        userAvatarSelector: '.profile__avatar'
+    },
+    (user) => api.setUserInfo(user)
+);
 
 const renderCard = (item) => {
     const card = new Card(item, '#card-template', (item) => {
@@ -50,12 +57,21 @@ const renderCard = (item) => {
     return card.createCardElement();
 }
 
-const addCardLogic = (event, values)=>{
+const addCardLogic = (event, values) => {
     api.addCard({ name: values['card-name'], link: values['card-image-link'] })
-    .then(card => {
-        cardSection.addItem(card);
-    })
-    .catch(error => console.log(error));
+        .then(card => {
+            cardSection.addItem(card);
+        })
+        .catch(error => console.log(error));
+}
+
+const updateAvatar = (event, values) => {
+    api.updateAvatar(values['linkInput'])
+        .then(({ avatar }) => {
+            const user = userInfo.getUserInfo();
+            userInfo.setUserInfo({ ...user, avatar });
+        })
+        .catch(error => console.log(error));
 }
 
 
@@ -66,42 +82,42 @@ imagePopup.setEventListeners();
 const addCardPopup = new PopupWithForm('#popup-card', addCardLogic);
 addCardPopup.setEventListeners();
 const addCardBtn = document.querySelector('.profile__button-add');
-addCardBtn.addEventListener('click', (event)=>{addCardPopup.open()});
+addCardBtn.addEventListener('click', (event) => { addCardPopup.open() });
 
 //Инициализация модального окна профиля
-const profileEditPopup = new PopupWithForm('#popup-profile', (event, values)=>{console.log(event); console.log(values)})
+const profileEditPopup = new PopupWithForm('#popup-profile', (event, values) => { console.log(event); console.log(values) })
 profileEditPopup.setEventListeners();
 const profileEditBtn = document.querySelector('.profile__button-edit');
-profileEditBtn.addEventListener('click', (event)=>{profileEditPopup.open()});
+profileEditBtn.addEventListener('click', (event) => {
+    profileEditPopup.setInputValues((form) => {
+        const { name, about } = userInfo.getUserInfo();
+        form.elements.name.value = name;
+        form.elements.profile.value = about;
+    })
+    profileEditPopup.open()
+});
 
 //Инициализация модального окна реадктирования аватара
-const avatarEditPopup = new PopupWithForm('#popup-profile-avatar', (event, values)=>{console.log(event); console.log(values)})
+const avatarEditPopup = new PopupWithForm('#popup-profile-avatar', updateAvatar)
 avatarEditPopup.setEventListeners();
 const avatarEditBtn = document.querySelector('.profile__button-avatar');
-avatarEditBtn.addEventListener('click', (event)=>{avatarEditPopup.open()});
+avatarEditBtn.addEventListener('click', (event) => { avatarEditPopup.open() });
+
 
 
 const initCards = (cards) => {
-    const cardSection = new Section({items: cards, renderer: renderCard}, '.elements');
+    const cardSection = new Section({ items: cards, renderer: renderCard }, '.elements');
     cardSection.renderAllItems();
 }
 
 //Ждем загрузки профиля и карточек
 Promise.all([api.getUser(), api.getCards()])
-        .then(([user, cards]) => {
-            initCards(cards);
-            userInfo.setUserInfo(user);
-        })
-        .catch((error => console.log(error)));
-        
+    .then(([user, cards]) => {
+        initCards(cards);
+        userInfo.setUserInfo(user);
+    })
+    .catch((error => console.log(error)));
 
-userInfo.getUserInfo(() => {
-    return api.getUser()
-        .then(user => {
-            return user;
-        })
-        .catch(error => console.log(error));
-})
 
 
 

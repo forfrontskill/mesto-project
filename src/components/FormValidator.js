@@ -86,6 +86,6 @@ export default class FormValidator {
     _activeSubmitButton(submitButton) {
         submitButton.classList.remove(this._inactiveButtonClass);
         // submitButton.removeAttribute("disabled", "");
-        submitButton.disabled = true;
+        submitButton.disabled = false;
     }
 }
