@@ -42,9 +42,15 @@ avatarEditFormValidator.enableValidation();
 const api = new Api(config);
 
 const renderCard = (item) => {
-    const {userId} = userInfo.getUserInfo();
-    console.log('userId:'+userId);
-    const card = new Card(item, '#card-template',(item) => {imagePopup.open(item)}, userId);
+    const { userId } = userInfo.getUserInfo();
+    console.log('userId:' + userId);
+    const card = new Card(item,
+        '#card-template',
+        (item) => { imagePopup.open(item) },
+        userId,
+        ()=>{console.log('Like')},
+        ()=>{console.log('dislike')}
+    );
     return card.createCardElement();
 }
 
@@ -92,7 +98,7 @@ addCardPopup.setEventListeners();
 const addCardBtn = document.querySelector('.profile__button-add');
 addCardBtn.addEventListener('click', (event) => {
     addCardFormValidator.initValidationSubmitButton();
-    addCardPopup.open() 
+    addCardPopup.open()
 });
 
 //Инициализация модального окна профиля
@@ -115,7 +121,7 @@ avatarEditPopup.setEventListeners();
 const avatarEditBtn = document.querySelector('.profile__button-avatar');
 avatarEditBtn.addEventListener('click', (event) => {
     avatarEditFormValidator.initValidationSubmitButton();
-    avatarEditPopup.open() 
+    avatarEditPopup.open()
 });
 
 

@@ -6,7 +6,7 @@ const profileInfo = {
 }
 
 export default class Card {
-    constructor({ cardId, name, link, imageDescription, favorite, owner, likes}, selector, handleCardClick, userId) {
+    constructor({ cardId, name, link, imageDescription, owner, likes}, selector, handleCardClick, userId, like, dislike) {
         this._userId = userId;
 
         const { likeCount, isUserLiked, activeDelete } = this._initCardInfo({ likes, ownerId: owner._id })
@@ -15,14 +15,14 @@ export default class Card {
         this._name = name;
         this._link = link;
         this._imageDescription = imageDescription;
-        this._favorite = favorite;
+        this._favorite = isUserLiked;
         this._likeCount = likeCount;
         this._activeDelete = activeDelete;
         this._selector = selector;
         this._handleCardClick = handleCardClick;
-        this._isUserLiked = isUserLiked;
         this._element = '';
-
+        this._like = like;
+        this._dislike = dislike;
     }
 
     createCardElement() {
@@ -46,7 +46,6 @@ export default class Card {
     }
 
     _updateCard(card, { cardId, name, link, imageDescription, favorite, likeCount, activeDelete }) {
-        console.log(name +':' + this._activeDelete);
         card.cardId = cardId;
         const cardImage = card.querySelector('.element__image');
         cardImage.src = link;
@@ -55,7 +54,7 @@ export default class Card {
         card.querySelector('.element__name').textContent = name;
 
         const likeButton = card.querySelector('.element__button-like');
-        if (favorite) {
+        if (this._favorite) {
             likeButton.classList.add('element__button-like_active');
         } else {
             likeButton.classList.remove('element__button-like_active');
@@ -78,14 +77,15 @@ export default class Card {
         const card = event.target.closest('.element');
 
         if (event.currentTarget.classList.contains('element__button-like_active')) {
-
+                //TODO: Добавить API лайка
         } else {
-
+                //TODO: Добавить API лайка
+                console.log('dislike');
+                this._dislike.bind(this);
         }
     }
 
     _initCardInfo({ likes, ownerId }) {
-        console.log(ownerId+'='+this._userId);
         const activeDelete = ownerId === this._userId;
         const likeCount = likes.length;
         const isUserLiked = likes.some(like => like._id === this._userId);
