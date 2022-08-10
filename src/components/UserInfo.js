@@ -10,7 +10,7 @@ export default class UserInfo {
     }
 
     getUserInfo() {
-        return { name: this._name, about: this._about, avatar: this._avatar };
+        return { name: this._name, about: this._about, avatar: this._avatar, userId: this._id };
     }
 
     setUserInfo({_id, name, about, avatar}) {

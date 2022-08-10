@@ -40,22 +40,30 @@ avatarEditFormValidator.enableValidation();
 
 //Глобавльные классы
 const api = new Api(config);
+
+const renderCard = (item) => {
+    const {userId} = userInfo.getUserInfo();
+    console.log('userId:'+userId);
+    const card = new Card(item, '#card-template',(item) => {imagePopup.open(item)}, userId);
+    return card.createCardElement();
+}
+
 const cardSection = new Section({ items: [], renderer: renderCard }, '.elements');
 const userInfo = new UserInfo(
     {
         userNameSelector: '.profile__name',
         userAboutSelector: '.profile__description',
         userAvatarSelector: '.profile__avatar'
-    },
-    (user) => api.setUserInfo(user)
+    }
 );
 
-const renderCard = (item) => {
-    const card = new Card(item, '#card-template', (item) => {
-        imagePopup.open(item)
-    });
-    return card.createCardElement();
-}
+//Ждем загрузки профиля и карточек
+Promise.all([api.getUser(), api.getCards()])
+    .then(([user, cards]) => {
+        userInfo.setUserInfo(user);
+        initCards(cards);
+    })
+    .catch((error => console.log(error)));
 
 const addCardLogic = (event, values) => {
     api.addCard({ name: values['card-name'], link: values['card-image-link'] })
@@ -82,7 +90,10 @@ imagePopup.setEventListeners();
 const addCardPopup = new PopupWithForm('#popup-card', addCardLogic);
 addCardPopup.setEventListeners();
 const addCardBtn = document.querySelector('.profile__button-add');
-addCardBtn.addEventListener('click', (event) => { addCardPopup.open() });
+addCardBtn.addEventListener('click', (event) => {
+    addCardFormValidator.initValidationSubmitButton();
+    addCardPopup.open() 
+});
 
 //Инициализация модального окна профиля
 const profileEditPopup = new PopupWithForm('#popup-profile', (event, values) => { console.log(event); console.log(values) })
@@ -94,6 +105,7 @@ profileEditBtn.addEventListener('click', (event) => {
         form.elements.name.value = name;
         form.elements.profile.value = about;
     })
+    profileEditFormValidator.initValidationSubmitButton();
     profileEditPopup.open()
 });
 
@@ -101,7 +113,10 @@ profileEditBtn.addEventListener('click', (event) => {
 const avatarEditPopup = new PopupWithForm('#popup-profile-avatar', updateAvatar)
 avatarEditPopup.setEventListeners();
 const avatarEditBtn = document.querySelector('.profile__button-avatar');
-avatarEditBtn.addEventListener('click', (event) => { avatarEditPopup.open() });
+avatarEditBtn.addEventListener('click', (event) => {
+    avatarEditFormValidator.initValidationSubmitButton();
+    avatarEditPopup.open() 
+});
 
 
 
@@ -110,13 +125,7 @@ const initCards = (cards) => {
     cardSection.renderAllItems();
 }
 
-//Ждем загрузки профиля и карточек
-Promise.all([api.getUser(), api.getCards()])
-    .then(([user, cards]) => {
-        initCards(cards);
-        userInfo.setUserInfo(user);
-    })
-    .catch((error => console.log(error)));
+
 
 
 

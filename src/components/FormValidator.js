@@ -24,7 +24,7 @@ export default class FormValidator {
         const inputs = this._formElement.querySelectorAll(this._inputSelector);
         const validationResult = this._isFormValid(inputs);
         if (validationResult) {
-            const submitButton = form.querySelector(this._submitButtonSelector);
+            const submitButton = this._formElement.querySelector(this._submitButtonSelector);
             this._disableSubmitButton(submitButton);
         }
     }
@@ -73,19 +73,16 @@ export default class FormValidator {
     };
 
     _isFormValid(inputs) {
-        Array.from(inputs).some((input) => !input.validity.valid)
+        return Array.from(inputs).some((input) => !input.validity.valid)
     };
 
     _disableSubmitButton(submitButton) {
         submitButton.classList.add(this._inactiveButtonClass);
-        // submitButton.setAttribute("disabled", "");
-        //TODO: проверить работу переключения2
         submitButton.disabled = true;
     }
 
     _activeSubmitButton(submitButton) {
         submitButton.classList.remove(this._inactiveButtonClass);
-        // submitButton.removeAttribute("disabled", "");
         submitButton.disabled = false;
     }
 }

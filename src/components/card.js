@@ -6,10 +6,11 @@ const profileInfo = {
 }
 
 export default class Card {
-    constructor({ cardId, name, link, imageDescription, favorite, owner, likes }, selector, handleCardClick) {
-        this.ownerId = owner._id;
-        const { likeCount, isUserLiked, activeDelete } = this._initCardInfo({ likes, ownerId: this.ownerId })
+    constructor({ cardId, name, link, imageDescription, favorite, owner, likes}, selector, handleCardClick, userId) {
+        this._userId = userId;
 
+        const { likeCount, isUserLiked, activeDelete } = this._initCardInfo({ likes, ownerId: owner._id })
+        this.ownerId = owner._id;
         this._cardId = cardId;
         this._name = name;
         this._link = link;
@@ -19,6 +20,7 @@ export default class Card {
         this._activeDelete = activeDelete;
         this._selector = selector;
         this._handleCardClick = handleCardClick;
+        this._isUserLiked = isUserLiked;
         this._element = '';
 
     }
@@ -44,7 +46,7 @@ export default class Card {
     }
 
     _updateCard(card, { cardId, name, link, imageDescription, favorite, likeCount, activeDelete }) {
-
+        console.log(name +':' + this._activeDelete);
         card.cardId = cardId;
         const cardImage = card.querySelector('.element__image');
         cardImage.src = link;
@@ -60,7 +62,7 @@ export default class Card {
         }
 
         const deleteButton = card.querySelector('.element__button-delete');
-        if (activeDelete) {
+        if (this._activeDelete) {
             this._showDeleteCardButton(deleteButton);
         } else {
             this._hideDeleteCardButton(deleteButton);
@@ -83,9 +85,10 @@ export default class Card {
     }
 
     _initCardInfo({ likes, ownerId }) {
-        const activeDelete = ownerId === profileInfo.id;
+        console.log(ownerId+'='+this._userId);
+        const activeDelete = ownerId === this._userId;
         const likeCount = likes.length;
-        const isUserLiked = likes.some(like => like._id === profileInfo.id);
+        const isUserLiked = likes.some(like => like._id === this._userId);
         return { likeCount, isUserLiked, activeDelete };
     }
 
