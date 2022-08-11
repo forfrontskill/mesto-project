@@ -6,12 +6,11 @@ const profileInfo = {
 }
 
 export default class Card {
-    constructor({ cardId, name, link, imageDescription, owner, likes}, selector, handleCardClick, userId, like, dislike) {
+    constructor({ _id, name, link, imageDescription, owner, likes }, selector, handleCardClick, userId, like, dislike, deleteCard) {
         this._userId = userId;
-
         const { likeCount, isUserLiked, activeDelete } = this._initCardInfo({ likes, ownerId: owner._id })
         this.ownerId = owner._id;
-        this._cardId = cardId;
+        this._cardId = _id;
         this._name = name;
         this._link = link;
         this._imageDescription = imageDescription;
@@ -23,6 +22,9 @@ export default class Card {
         this._element = '';
         this._like = like;
         this._dislike = dislike;
+        this._likeIcon = '';
+        this._deleteCard = deleteCard;
+        this._likeCountTextElement = '';
     }
 
     createCardElement() {
@@ -40,7 +42,9 @@ export default class Card {
         this._setEventListeners();
 
         const button = this._element.querySelector('.element__button-like');
-        button.addEventListener('click', this._toggleCardToFavorite, false);
+        this._likeIcon = this._element.querySelector('.element__button-like');
+        this._likeCountTextElement = this._element.querySelector('.element__count-like');
+        button.addEventListener('click', this._toggleCardToFavorite.bind(this));
 
         return this._element;
     }
@@ -61,6 +65,7 @@ export default class Card {
         }
 
         const deleteButton = card.querySelector('.element__button-delete');
+
         if (this._activeDelete) {
             this._showDeleteCardButton(deleteButton);
         } else {
@@ -74,14 +79,19 @@ export default class Card {
     };
 
     _toggleCardToFavorite(event) {
-        const card = event.target.closest('.element');
-
         if (event.currentTarget.classList.contains('element__button-like_active')) {
-                //TODO: Добавить API лайка
+            this._dislike(this._cardId).then((res) => {
+                this._setLikesCount(res.likes.length);
+                this._dislikeCard();
+            })
+                .catch(error => console.log(error));
+
         } else {
-                //TODO: Добавить API лайка
-                console.log('dislike');
-                this._dislike.bind(this);
+            this._like(this._cardId).then((res) => {
+                this._setLikesCount(res.likes.length);
+                this._likeCard();
+            })
+                .catch(error => console.log(error));
         }
     }
 
@@ -101,8 +111,11 @@ export default class Card {
     }
 
     _deleteCardEvent = (event) => {
-        const card = event.target.closest('.element');
-        card.remove();
+        this._deleteCard(this._cardId).then((res) => {
+            const card = event.target.closest('.element');
+            card.remove();
+        })
+            .catch(error => console.log(error));
     }
 
     _setEventListeners() {
@@ -111,5 +124,16 @@ export default class Card {
 
         const deleteButton = this._element.querySelector('.element__button-delete');
         deleteButton.addEventListener('click', (event) => this._deleteCardEvent(event));
+    }
+    _likeCard() {
+        this._likeIcon.classList.add('element__button-like_active')
+    }
+    _dislikeCard() {
+        this._likeIcon.classList.remove('element__button-like_active')
+    }
+
+    _setLikesCount(likeCount) {
+        console.log(this._likeCountTextElement);
+        this._likeCountTextElement.textContent = likeCount;
     }
 }

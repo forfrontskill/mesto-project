@@ -7,10 +7,6 @@ import Api from './components/Api.js';
 import UserInfo from './components/UserInfo.js';
 import Section from './components/Section.js';
 
-const profileNameSelector = '.profile__name';
-const profileDescriptionSelector = '.profile__description';
-const cardSectionSelector = '.elements';
-
 const validationClass = {
     inputSelector: '.form-popup__text-input',
     submitButtonSelector: '.form-popup__button-save',
@@ -38,18 +34,30 @@ profileEditFormValidator.enableValidation();
 const avatarEditFormValidator = new FormValidator(validationClass, document.forms['avatarEdit']);
 avatarEditFormValidator.enableValidation();
 
+
+
 //Глобавльные классы
 const api = new Api(config);
 
 const renderCard = (item) => {
     const { userId } = userInfo.getUserInfo();
-    console.log('userId:' + userId);
+    const likeCard = (cardId) => {
+        return api.likeCard(cardId);
+    }
+    const disLikeCard = (cardId) => {
+        return api.dislikeCard(cardId);
+    }
+    const deleteCard = (cardId) => {
+        return api.deleteCard(cardId);
+    }
+
     const card = new Card(item,
         '#card-template',
         (item) => { imagePopup.open(item) },
         userId,
-        ()=>{console.log('Like')},
-        ()=>{console.log('dislike')}
+        likeCard,
+        disLikeCard,
+        deleteCard
     );
     return card.createCardElement();
 }
@@ -63,6 +71,8 @@ const userInfo = new UserInfo(
     }
 );
 
+
+
 //Ждем загрузки профиля и карточек
 Promise.all([api.getUser(), api.getCards()])
     .then(([user, cards]) => {
@@ -72,7 +82,7 @@ Promise.all([api.getUser(), api.getCards()])
     .catch((error => console.log(error)));
 
 const addCardLogic = (event, values) => {
-    api.addCard({ name: values['card-name'], link: values['card-image-link'] })
+    return api.addCard({ name: values['card-name'], link: values['card-image-link'] })
         .then(card => {
             cardSection.addItem(card);
         })
@@ -80,13 +90,22 @@ const addCardLogic = (event, values) => {
 }
 
 const updateAvatar = (event, values) => {
-    api.updateAvatar(values['linkInput'])
+    return api.updateAvatar(values['linkInput'])
         .then(({ avatar }) => {
             const user = userInfo.getUserInfo();
             userInfo.setUserInfo({ ...user, avatar });
         })
         .catch(error => console.log(error));
 }
+
+const updateProfileInfo = (event, values) => {
+    return api.updateUser({ name: values['name'], about: values['profile'] })
+        .then((user) => {
+            userInfo.setUserInfo(user);
+        })
+        .catch(error => console.log(error));
+}
+
 
 
 const imagePopup = new PopupWithImage('#popup-card-image');
@@ -102,8 +121,9 @@ addCardBtn.addEventListener('click', (event) => {
 });
 
 //Инициализация модального окна профиля
-const profileEditPopup = new PopupWithForm('#popup-profile', (event, values) => { console.log(event); console.log(values) })
+const profileEditPopup = new PopupWithForm('#popup-profile', updateProfileInfo)
 profileEditPopup.setEventListeners();
+
 const profileEditBtn = document.querySelector('.profile__button-edit');
 profileEditBtn.addEventListener('click', (event) => {
     profileEditPopup.setInputValues((form) => {
@@ -123,8 +143,6 @@ avatarEditBtn.addEventListener('click', (event) => {
     avatarEditFormValidator.initValidationSubmitButton();
     avatarEditPopup.open()
 });
-
-
 
 const initCards = (cards) => {
     const cardSection = new Section({ items: cards, renderer: renderCard }, '.elements');
