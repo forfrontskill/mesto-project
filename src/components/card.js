@@ -1,10 +1,3 @@
-const profileInfo = {
-    id: 'Loading...',
-    name: 'Loading...',
-    about: 'Loading...',
-    avatar: 'Loading...'
-}
-
 export default class Card {
     constructor({ _id, name, link, imageDescription, owner, likes }, selector, handleCardClick, userId, like, dislike, deleteCard) {
         this._userId = userId;
@@ -49,7 +42,7 @@ export default class Card {
         return this._element;
     }
 
-    _updateCard(card, { cardId, name, link, imageDescription, favorite, likeCount, activeDelete }) {
+    _updateCard(card, { cardId, name, link, imageDescription, likeCount }) {
         card.cardId = cardId;
         const cardImage = card.querySelector('.element__image');
         cardImage.src = link;
@@ -133,7 +126,6 @@ export default class Card {
     }
 
     _setLikesCount(likeCount) {
-        console.log(this._likeCountTextElement);
         this._likeCountTextElement.textContent = likeCount;
     }
 }

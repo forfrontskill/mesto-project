@@ -26,7 +26,6 @@ const config = {
     }
 }
 
-//Инициализация валидации всех форм
 const addCardFormValidator = new FormValidator(validationClass, document.forms['card-create']);
 addCardFormValidator.enableValidation();
 const profileEditFormValidator = new FormValidator(validationClass, document.forms['profile-edit']);
@@ -35,8 +34,6 @@ const avatarEditFormValidator = new FormValidator(validationClass, document.form
 avatarEditFormValidator.enableValidation();
 
 
-
-//Глобавльные классы
 const api = new Api(config);
 
 const renderCard = (item) => {
@@ -72,8 +69,6 @@ const userInfo = new UserInfo(
 );
 
 
-
-//Ждем загрузки профиля и карточек
 Promise.all([api.getUser(), api.getCards()])
     .then(([user, cards]) => {
         userInfo.setUserInfo(user);
@@ -111,7 +106,7 @@ const updateProfileInfo = (event, values) => {
 const imagePopup = new PopupWithImage('#popup-card-image');
 imagePopup.setEventListeners();
 
-//Инициализация модального окна
+
 const addCardPopup = new PopupWithForm('#popup-card', addCardLogic);
 addCardPopup.setEventListeners();
 const addCardBtn = document.querySelector('.profile__button-add');
@@ -120,7 +115,7 @@ addCardBtn.addEventListener('click', (event) => {
     addCardPopup.open()
 });
 
-//Инициализация модального окна профиля
+
 const profileEditPopup = new PopupWithForm('#popup-profile', updateProfileInfo)
 profileEditPopup.setEventListeners();
 
@@ -135,7 +130,6 @@ profileEditBtn.addEventListener('click', (event) => {
     profileEditPopup.open()
 });
 
-//Инициализация модального окна реадктирования аватара
 const avatarEditPopup = new PopupWithForm('#popup-profile-avatar', updateAvatar)
 avatarEditPopup.setEventListeners();
 const avatarEditBtn = document.querySelector('.profile__button-avatar');
