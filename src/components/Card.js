@@ -1,12 +1,11 @@
 export default class Card {
-    constructor({ _id, name, link, imageDescription, owner, likes }, selector, handleCardClick, userId, like, dislike, deleteCard) {
+    constructor({ _id, name, link, owner, likes }, selector, handleCardClick, userId, like, dislike, deleteCard) {
         this._userId = userId;
         const { likeCount, isUserLiked, activeDelete } = this._initCardInfo({ likes, ownerId: owner._id })
         this.ownerId = owner._id;
         this._cardId = _id;
         this._name = name;
         this._link = link;
-        this._imageDescription = imageDescription;
         this._favorite = isUserLiked;
         this._likeCount = likeCount;
         this._activeDelete = activeDelete;
@@ -26,7 +25,6 @@ export default class Card {
             cardId: this._cardId,
             name: this._name,
             link: this._link,
-            imageDescription: this._imageDescription,
             favorite: this._favorite,
             likeCount: this._likeCount,
             activeDelete: this._activeDelete
@@ -42,11 +40,10 @@ export default class Card {
         return this._element;
     }
 
-    _updateCard(card, { cardId, name, link, imageDescription, likeCount }) {
+    _updateCard(card, { cardId, name, link, likeCount }) {
         card.cardId = cardId;
         const cardImage = card.querySelector('.element__image');
         cardImage.src = link;
-        cardImage.alt = imageDescription;
 
         card.querySelector('.element__name').textContent = name;
 
@@ -105,8 +102,8 @@ export default class Card {
 
     _deleteCardEvent = (event) => {
         this._deleteCard(this._cardId).then((res) => {
-            const card = event.target.closest('.element');
-            card.remove();
+            this._element.remove();
+            this._element = null;
         })
             .catch(error => console.log(error));
     }

@@ -33,7 +33,6 @@ profileEditFormValidator.enableValidation();
 const avatarEditFormValidator = new FormValidator(validationClass, document.forms['avatarEdit']);
 avatarEditFormValidator.enableValidation();
 
-
 const api = new Api(config);
 
 const renderCard = (item) => {
@@ -101,20 +100,17 @@ const updateProfileInfo = (event, values) => {
         .catch(error => console.log(error));
 }
 
-
-
 const imagePopup = new PopupWithImage('#popup-card-image');
 imagePopup.setEventListeners();
 
-
 const addCardPopup = new PopupWithForm('#popup-card', addCardLogic);
 addCardPopup.setEventListeners();
+
 const addCardBtn = document.querySelector('.profile__button-add');
 addCardBtn.addEventListener('click', (event) => {
     addCardFormValidator.initValidationSubmitButton();
     addCardPopup.open()
 });
-
 
 const profileEditPopup = new PopupWithForm('#popup-profile', updateProfileInfo)
 profileEditPopup.setEventListeners();
