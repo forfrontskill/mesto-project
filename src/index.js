@@ -59,6 +59,13 @@ const renderCard = (item) => {
 }
 
 const cardSection = new Section({ items: [], renderer: renderCard }, '.elements');
+
+const initCards = (cards) => {
+    cardSection.setItems(cards);
+    cardSection.renderAllItems();
+}
+
+
 const userInfo = new UserInfo(
     {
         userNameSelector: '.profile__name',
@@ -75,27 +82,46 @@ Promise.all([api.getUser(), api.getCards()])
     })
     .catch((error => console.log(error)));
 
+
+
 const addCardLogic = (event, values) => {
-    return api.addCard({ name: values['card-name'], link: values['card-image-link'] })
+    addCardPopup.showLoading();
+    api.addCard({ name: values['card-name'], link: values['card-image-link'] })
         .then(card => {
             cardSection.addItem(card);
+        }).then((res) => {
+            addCardPopup.close();
+        }).finally(()=>{
+            addCardPopup.hideLoading();
         })
         .catch(error => console.log(error));
 }
+const addCardPopup = new PopupWithForm('#popup-card', addCardLogic.bind(this));
+addCardPopup.setEventListeners();
 
 const updateAvatar = (event, values) => {
-    return api.updateAvatar(values['linkInput'])
+    avatarEditPopup.showLoading();
+    api.updateAvatar(values['linkInput'])
         .then(({ avatar }) => {
             const user = userInfo.getUserInfo();
             userInfo.setUserInfo({ ...user, avatar });
+        }).then((res) => {
+            avatarEditPopup.close();
+        }).finally(()=>{
+            avatarEditPopup.hideLoading();
         })
         .catch(error => console.log(error));
 }
 
 const updateProfileInfo = (event, values) => {
-    return api.updateUser({ name: values['name'], about: values['profile'] })
+    profileEditPopup.showLoading();
+    api.updateUser({ name: values['name'], about: values['profile'] })
         .then((user) => {
             userInfo.setUserInfo(user);
+        }).then((res) => {
+            profileEditPopup.close();
+        }).finally(()=>{
+            profileEditPopup.hideLoading();
         })
         .catch(error => console.log(error));
 }
@@ -103,8 +129,7 @@ const updateProfileInfo = (event, values) => {
 const imagePopup = new PopupWithImage('#popup-card-image');
 imagePopup.setEventListeners();
 
-const addCardPopup = new PopupWithForm('#popup-card', addCardLogic);
-addCardPopup.setEventListeners();
+
 
 const addCardBtn = document.querySelector('.profile__button-add');
 addCardBtn.addEventListener('click', (event) => {
@@ -112,7 +137,7 @@ addCardBtn.addEventListener('click', (event) => {
     addCardPopup.open()
 });
 
-const profileEditPopup = new PopupWithForm('#popup-profile', updateProfileInfo)
+const profileEditPopup = new PopupWithForm('#popup-profile', updateProfileInfo.bind(this))
 profileEditPopup.setEventListeners();
 
 const profileEditBtn = document.querySelector('.profile__button-edit');
@@ -126,7 +151,7 @@ profileEditBtn.addEventListener('click', (event) => {
     profileEditPopup.open()
 });
 
-const avatarEditPopup = new PopupWithForm('#popup-profile-avatar', updateAvatar)
+const avatarEditPopup = new PopupWithForm('#popup-profile-avatar', updateAvatar.bind(this))
 avatarEditPopup.setEventListeners();
 const avatarEditBtn = document.querySelector('.profile__button-avatar');
 avatarEditBtn.addEventListener('click', (event) => {
@@ -134,10 +159,7 @@ avatarEditBtn.addEventListener('click', (event) => {
     avatarEditPopup.open()
 });
 
-const initCards = (cards) => {
-    const cardSection = new Section({ items: cards, renderer: renderCard }, '.elements');
-    cardSection.renderAllItems();
-}
+
 
 
 

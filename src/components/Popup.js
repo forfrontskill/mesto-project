@@ -2,10 +2,14 @@ export default class Popup {
     constructor(selector) {
         this.selector = selector;
         this.popup = document.querySelector(selector);
+        this._closePopupOutsideBinded = this._closePopupOutside.bind(this);
+        this._handleEscCloseBinded = this._handleEscClose.bind(this);
     }
 
     open() {
         this.popup.classList.add('popup_visible');
+        this.popup.addEventListener('mousedown', this._closePopupOutsideBinded);
+        document.addEventListener('keydown', this._handleEscCloseBinded);
     }
 
     close() {
@@ -33,8 +37,5 @@ export default class Popup {
                 this.close();
             }
         })
-
-        this.popup.addEventListener('mousedown', this._closePopupOutside.bind(this));
-        document.addEventListener('keydown', this._handleEscClose.bind(this));
     }
 }
