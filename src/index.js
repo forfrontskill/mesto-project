@@ -73,12 +73,12 @@ const userInfo = new UserInfo(
         userAvatarSelector: '.profile__avatar'
     }
 );
-
+ 
 
 Promise.all([api.getUser(), api.getCards()])
     .then(([user, cards]) => {
         userInfo.setUserInfo(user);
-        initCards(cards);
+        initCards(cards.reverse());
     })
     .catch((error => console.log(error)));
 

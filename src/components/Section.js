@@ -5,7 +5,7 @@ export default class Section {
         this._container = document.querySelector(selector);
     }
 
-    setItems(items){
+    setItems(items) {
         this._items = items;
     }
 
